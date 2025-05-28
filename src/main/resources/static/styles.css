@@ -1,0 +1,416 @@
+/* styles.css */
+:root {
+    /* Light Mode Colors */
+    --color1: #654C52;
+    --color2: #B99099;
+    --color3: #E8DDDD;
+    --color4: #704A4C;
+    --color5: #762E3F;
+    --text-color: #333;
+    --bg-color: #f9f9f9;
+    --card-bg: white;
+    --nav-bg: white;
+    --footer-bg: var(--color1);
+    --hero-gradient: linear-gradient(135deg, var(--color3) 0%, var(--color2) 100%);
+    --cta-gradient: linear-gradient(135deg, var(--color2) 0%, var(--color5) 100%);
+}
+
+/* Dark Mode Colors */
+[data-theme="dark"] {
+    --color1: #B99099;
+    --color2: #D4B8BE;
+    --color3: #3A3335;
+    --color4: #A77A7E;
+    --color5: #C06578;
+    --text-color: #F3ECEC;
+    --bg-color: #1F1B1C;
+    --card-bg: #2A2426;
+    --nav-bg: #1F1B1C;
+    --footer-bg: #654C52;
+    --hero-gradient: linear-gradient(135deg, #3A3335 0%, #B99099 100%);
+    --cta-gradient: linear-gradient(135deg, #B99099 0%, #C06578 100%);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.6;
+}
+
+.great-vibes {
+    font-family: 'Great Vibes', cursive;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navigation Styles */
+nav {
+    background-color: var(--nav-bg);
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Great Vibes', cursive;
+    font-size: 32px;
+    color: var(--color5);
+    font-weight: bold;
+}
+
+.logo a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--color5);
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.auth-buttons a {
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.auth-buttons .sign-in {
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+}
+
+.auth-buttons .register {
+    background-color: var(--color5);
+    color: white;
+}
+
+/* Theme Toggle Styles */
+.theme-toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    margin-left: 15px;
+}
+
+.theme-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color5);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--color1);
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-label {
+    font-size: 14px;
+    margin-right: 5px;
+    color: var(--text-color);
+}
+
+/* Footer Specific Styles */
+.footer {
+    background-color: var(--footer-bg);
+    color: white;
+    padding: 60px 20px 40px;
+    text-align: left;
+}
+
+.footer .container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: var(--color2);
+}
+
+.footer-column p {
+    font-size: 14px;
+    color: var(--color3);
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: var(--color2);
+}
+
+.social-icons {
+    margin-top: 10px;
+}
+
+.social-icons a {
+    color: white;
+    margin-right: 10px;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: var(--color2);
+}
+
+.footer-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-top: 1px solid var(--color3);
+    padding-top: 20px;
+}
+
+.newsletter h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--color2);
+}
+
+.newsletter form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.newsletter input[type="email"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 250px;
+    max-width: 100%;
+}
+
+.newsletter button {
+    background-color: var(--color5);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.newsletter button:hover {
+    background-color: var(--color2);
+}
+
+/* Login/Register Container */
+.auth-form-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: var(--card-bg);
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Form Title */
+.auth-form-container h2 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.8rem;
+    color: var(--color5);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Input Fields */
+.auth-form-container label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--color1);
+}
+
+.auth-form-container input[type="text"],
+.auth-form-container input[type="email"],
+.auth-form-container input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 18px;
+    border: 2px solid var(--color2);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    transition: border-color 0.3s;
+}
+
+.auth-form-container input[type="text"]:focus,
+.auth-form-container input[type="email"]:focus,
+.auth-form-container input[type="password"]:focus {
+    border-color: var(--color5);
+    outline: none;
+}
+
+/* Submit Button */
+.auth-form-container button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: var(--cta-gradient);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.4s ease;
+    margin-top: 10px;
+}
+
+.auth-form-container button[type="submit"]:hover {
+    background: var(--color5);
+}
+
+/* Link for switching between login/register */
+.auth-form-container .switch-link {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: var(--color4);
+}
+
+.auth-form-container .switch-link a {
+    color: var(--color5);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-form-container .switch-link a:hover {
+    text-decoration: underline;
+}
+
+/* Error Message */
+.auth-form-container .error-message {
+    color: #D9534F;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .auth-buttons {
+        margin-top: 15px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

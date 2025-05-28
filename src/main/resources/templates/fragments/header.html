@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlawlessRead - Perfect Book Recommendations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<nav>
+    <div class="nav-container container">
+        <!-- Logo -->
+        <div class="logo">
+            <a href="/" th:href="@{/}">FlawlessRead</a>
+        </div>
+        <!-- Nav links -->
+        <div class="nav-links">
+            <a href="#" th:href="@{/search}">Search</a>
+            <a href="#" th:href="@{/stats}">Stats & Challenges</a>
+            <a href="#" th:href="@{/community}">Community</a>
+        </div>
+
+        <!-- Se não estiver autenticado -->
+        <div sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}" class="sign-in">Sign In</a>
+        </div>
+
+        <!-- Se estiver autenticado -->
+        <div sec:authorize="isAuthenticated()" style="display: flex; align-items: center; gap: 15px;">
+            <a th:href="@{/profile}" style="font-weight: 600; color: var(--color5);"
+               sec:authentication="name">User</a>
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button type="submit" style="background: none; border: none; color: var(--color5); cursor: pointer; font-weight: 500;">
+                    Logout
+                </button>
+            </form>
+        </div>
+
+        <!-- Alternador do tema (dark/light) -->
+            <label class="theme-toggle" title="Toggle light/dark theme">
+                <input type="checkbox" id="theme-switch" />
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+</nav>
+<script src="../../static/log.js"></script>
+</html>

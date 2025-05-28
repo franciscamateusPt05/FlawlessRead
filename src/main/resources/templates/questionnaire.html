@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preference Questionnaire</title>
+  <link rel="stylesheet" th:href="@{/styles.css}" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Great+Vibes&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<main class="container">
+  <div class="auth-form-container">
+    <h2>Preference Questionnaire</h2>
+    <form action="/questionnaire" method="post">
+      <input type="hidden" name="userId" th:value="${user.id}" />
+
+
+      <label for="generoFavorito">Favorite book genre:</label>
+      <select id="generoFavorito" name="generoFavorito" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="fiction">Fiction</option>
+        <option value="romance">Romance</option>
+        <option value="mystery">Mystery</option>
+      </select>
+
+      <label for="formatoPreferido">Do you prefer paper or digital books?</label>
+      <select id="formatoPreferido" name="formatoPreferido" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="paper">Paper</option>
+        <option value="digital">Digital</option>
+      </select>
+      <button type="submit">Submit Questionnaire</button>
+    </form>
+  </div>
+</main>
+
+</body>
+</html>

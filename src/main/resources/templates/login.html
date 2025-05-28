@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" th:href="@{/styles.css}" />
+  <title>Login - FlawlessRead</title>
+</head>
+<body>
+
+<section class="auth-form-container">
+  <h2>Login</h2>
+
+  <form th:action="@{/login}" method="post">
+    <div th:if="${param.error}" class="error-message">
+      Utilizador ou password inválidos.
+    </div>
+
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" required />
+
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" required />
+
+    <button type="submit">Login</button>
+  </form>
+
+  <div class="switch-link">
+    Ainda não tens conta? <a href="/register">Regista-te aqui</a>.
+  </div>
+
+  <div th:if="${param.logout}" style="text-align: center; margin-top: 15px; color: var(--color4); font-weight: 600;">
+    Sessão terminada com sucesso.
+  </div>
+</section>
+
+</body>
+</html>
