@@ -20,7 +20,7 @@ public class User {
     private String password;
 
     @ManyToMany
-    private Set<Book> favoriteBooks = new HashSet<>();
+    private Set<BooksRead> favoriteBooks = new HashSet<>();
 
     // Getters e Setters
     public Long getId() {
@@ -56,11 +56,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<Book> getFavoriteBooks() {
+    public Set<BooksRead> getFavoriteBooks() {
         return favoriteBooks;
     }
 
-    public void setFavoriteBooks(Set<Book> favoriteBooks) {
+    public void setFavoriteBooks(Set<BooksRead> favoriteBooks) {
         this.favoriteBooks = favoriteBooks;
     }
 }

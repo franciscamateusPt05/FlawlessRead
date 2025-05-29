@@ -15,15 +15,5 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping
-    public String listBooks(Model model) {
-        model.addAttribute("books", bookService.getAllBooks());
-        return "books/list";
-    }
 
-    @GetMapping("/{id}")
-    public String viewBook(@PathVariable Long id, Model model) {
-        model.addAttribute("book", bookService.getBookById(id));
-        return "books/view";
-    }
 }

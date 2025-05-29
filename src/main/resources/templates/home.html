@@ -1,15 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="~{fragments/header :: header}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlawlessRead - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
 <body>
+<div th:replace="fragments/header :: headerFragment"></div>
+<section class="books-section container">
+<div class="welcome-section container">
+    <h2>Welcome <span th:text="${user.get().getUsername()}">User</span></h2>
+    <h3>Always Find the Right Book.</h3>
+    <p>Flawless recommendations, perfect reading.</p>
+    <p>
+        FlawlessRead is your new literary best friend — a smart platform that understands your tastes, emotions, and cultural passions to recommend books like no other.
+        Say goodbye to generic suggestions. We combine Artificial Intelligence and sentiment analysis to create a personalized, engaging, and social reading experience.
+        Your next favorite book is just a click away.
+    </p>
+</div>
+</section>
+<!-- Tendências -->
+<section class="books-section container">
+    <h2>Trending Now</h2>
+    <div class="books-grid">
+        <div th:each="book,iterStat : ${trendingBooks}" th:if="${iterStat.index} < 10" class="book-card">
+            <img th:src="${book.getCapaUrl()}" th:alt="${book.getTitulo()}" />
+            <h4 th:text="${book.getTitulo()}">Book Title</h4>
+            <p th:text="${book.getAutor()}">Author Name</p>
+        </div>
+    </div>
+</section>
 
-<div th:replace="~{fragments/header :: header}"></div>
+<!-- Novidades -->
+<section class="books-section container">
+    <h2>New Releases</h2>
+    <div class="books-grid">
+        <div th:each="book,iterStat : ${newBooks}" th:if="${iterStat.index} < 10" class="book-card">
+            <img th:src="${book.getCapaUrl()}" th:alt="${book.getTitulo()}" />
+            <h4 th:text="${book.getTitulo()}">Book Title</h4>
+            <p th:text="${book.getAutor()}">Author Name</p>
+        </div>
+    </div>
+</section>
 
-<main>
-    <h1>Bem-vindo ao FlawlessRead</h1>
-</main>
-
-<div th:replace="~{fragments/footer :: footer}"></div>
-
+<div th:replace="fragments/footer :: footer"></div>
+<script src="../../static/log.js"></script>
 </body>
 </html>

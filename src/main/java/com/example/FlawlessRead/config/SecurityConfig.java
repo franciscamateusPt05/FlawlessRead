@@ -24,14 +24,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // desativa CSRF no estilo 6.1+
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .requestMatchers("/styles.css","/login", "/register", "/css/**", "/js/**").permitAll()  // público
+                        .anyRequest().authenticated()  // o resto exige login
                 )
-                .userDetailsService(customUserDetailsService)
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .loginPage("/login")              // página de login personalizada
+                        .defaultSuccessUrl("/", true)     // após login vai para home
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -42,6 +42,5 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
 }
