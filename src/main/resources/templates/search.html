@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pesquisar Livros | FlawlessRead</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<!-- Conteúdo da Pesquisa -->
+<section class="welcome-section">
+    <h2>Descobre Novos Mundos</h2>
+    <h3>Pesquisa livros pelo nome</h3>
+    <p>Usa a barra de pesquisa abaixo para explorar livros disponíveis na Open Library.</p>
+</section>
+
+<section class="container">
+    <form th:action="@{/search/results}" method="get" class="auth-form-container">
+        <label for="query">Nome do Livro:</label>
+        <input type="text" id="query" name="query">
+        <button type="submit">Pesquisar</button>
+    </form>
+</section>
+
+<div th:replace="fragments/footer :: footer"></div>
 
 </body>
 </html>

@@ -30,22 +30,26 @@ public class QuestionnaireController {
     @PostMapping("/questionnaire")
     public String processQuestionnaire(
             @RequestParam Long userId,
-            @RequestParam String generoFavorito,
-            @RequestParam String formatoPreferido,
+            @RequestParam(name = "generosPreferidos", required = false) String[] generosPreferidos,
             Model model) {
-
 
         User currentUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setUser(currentUser);
-        questionnaire.setGeneroFavorito(generoFavorito);
-        questionnaire.setFormatoPreferido(formatoPreferido);
+
+        if (generosPreferidos != null) {
+            String joinedGenres = String.join(",", generosPreferidos);
+            questionnaire.setGenerosPreferidos(joinedGenres);
+        } else {
+            questionnaire.setGenerosPreferidos("");
+        }
 
         questionnaireRepository.save(questionnaire);
 
         return "redirect:/login";
     }
+
 
 }
 

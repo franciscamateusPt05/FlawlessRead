@@ -4,25 +4,19 @@ import jakarta.persistence.*;
 
 @Entity
 public class Questionnaire {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relacionamento ManyToOne com User
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")  // FK para User
+    @ManyToOne
     private User user;
 
-    private String generoFavorito;
-    private String formatoPreferido;
-    // outros campos...
+    // Guarda os géneros preferidos separados por vírgula (simplificação)
+    private String generosPreferidos;
 
-    // Getters e setters
     public Long getId() {
         return id;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -36,19 +30,11 @@ public class Questionnaire {
         this.user = user;
     }
 
-    public String getGeneroFavorito() {
-        return generoFavorito;
+    public String getGenerosPreferidos() {
+        return generosPreferidos;
     }
 
-    public void setGeneroFavorito(String generoFavorito) {
-        this.generoFavorito = generoFavorito;
-    }
-
-    public String getFormatoPreferido() {
-        return formatoPreferido;
-    }
-
-    public void setFormatoPreferido(String formatoPreferido) {
-        this.formatoPreferido = formatoPreferido;
+    public void setGenerosPreferidos(String generosPreferidos) {
+        this.generosPreferidos = generosPreferidos;
     }
 }

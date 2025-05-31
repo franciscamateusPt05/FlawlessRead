@@ -26,7 +26,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/styles.css","/login", "/register", "/css/**", "/js/**").permitAll()  // público
+                        .requestMatchers("/styles.css","/login","/questionnaire", "/register", "/css/**", "/js/**").permitAll()  // público
                         .anyRequest().authenticated()  // o resto exige login
                 )
                 .formLogin(form -> form

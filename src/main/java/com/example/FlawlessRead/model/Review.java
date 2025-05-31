@@ -9,7 +9,7 @@ public class Review {
     private Long id;
 
     @ManyToOne
-    private BooksRead book;
+    private Book book;
 
     @ManyToOne
     private User user;

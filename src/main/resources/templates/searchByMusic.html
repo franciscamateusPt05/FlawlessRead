@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pesquisar Música | FlawlessRead</title>
+  <link rel="stylesheet" th:href="@{/styles.css}" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<section class="welcome-section">
+  <h2 class="great-vibes">Descobre Novos Mundos</h2>
+  <h3>Pesquisa livros com base numa música</h3>
+  <p>Escreve o nome de uma música para encontrares livros que combinam com ela.</p>
+</section>
+
+<section class="container">
+  <form th:action="@{/searchByMusic}" method="post" class="auth-form-container">
+    <label for="trackName">Nome da música:</label>
+    <div class="search-wrapper">
+      <input
+              type="text"
+              id="trackName"
+              name="trackName"
+              autocomplete="off"
+              placeholder="Escreve o nome da música..."
+      />
+      <!-- Input escondido para o artista -->
+      <input type="hidden" id="artistName" name="artistName" />
+      <div id="suggestions" class="autocomplete-suggestions"></div>
+    </div>
+    <button type="submit">Pesquisar</button>
+  </form>
+</section>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script>
+  const input = document.getElementById('trackName');
+  const artistInput = document.getElementById('artistName');
+  const suggestionsBox = document.getElementById('suggestions');
+
+  input.addEventListener('input', async () => {
+    const query = input.value.trim();
+    if (query.length < 2) {
+      suggestionsBox.innerHTML = '';
+      artistInput.value = ''; // limpa artista ao apagar input
+      return;
+    }
+
+    const response = await fetch(`/spotify/suggestions?q=${encodeURIComponent(query)}`);
+    const results = await response.json();
+
+    suggestionsBox.innerHTML = '';
+    results.forEach(item => {
+      const div = document.createElement('div');
+      div.classList.add('autocomplete-suggestion');
+      div.textContent = item.name + ' - ' + item.artist;
+      div.addEventListener('click', () => {
+        input.value = item.name;
+        artistInput.value = item.artist;  // preenche o campo escondido com o artista
+        suggestionsBox.innerHTML = '';
+      });
+      suggestionsBox.appendChild(div);
+    });
+  });
+</script>
+
+</body>
+</html>

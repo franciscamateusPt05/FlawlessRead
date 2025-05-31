@@ -50,12 +50,13 @@ public class RegisterController {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
-
-        // Encripta a password antes de guardar
         user.setPassword(passwordEncoder.encode(password));
 
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
+
+        System.out.println("ID do user depois de guardar: " + user.getId());
 
         return "redirect:/questionnaire?user=" + user.getId();
     }
+
 }

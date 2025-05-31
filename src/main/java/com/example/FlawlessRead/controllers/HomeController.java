@@ -1,5 +1,6 @@
 package com.example.FlawlessRead.controllers;
 
+import com.example.FlawlessRead.model.Book;
 import com.example.FlawlessRead.model.BookNewest;
 import com.example.FlawlessRead.model.BookTrending;
 import com.example.FlawlessRead.model.User;
@@ -7,12 +8,15 @@ import com.example.FlawlessRead.repository.BookNewestRepository;
 import com.example.FlawlessRead.repository.BookTrendingRepository;
 import com.example.FlawlessRead.repository.QuestionnaireRepository;
 import com.example.FlawlessRead.repository.UserRepository;
+import com.example.FlawlessRead.service.OpenLibraryService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,7 +50,7 @@ public class HomeController {
         // Exemplo de código, adapta ao teu repositório
         Optional<User> user = userRepository.findByUsername(username) ;
         var questionnaire = questionnaireRepository.findByUser(user);
-        String genero = questionnaire.getGeneroFavorito();
+        String genero = questionnaire.getGenerosPreferidos();
 
         List<BookTrending> trendingBooks = (List<BookTrending>) bookTrendingRepository.findByGenero(genero);
         List<BookNewest> newBooks = (List<BookNewest>) bookNewestRepository.findByGenero(genero);
@@ -60,4 +64,7 @@ public class HomeController {
 
         return "home";
     }
+
+
+
 }

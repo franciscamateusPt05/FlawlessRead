@@ -12,26 +12,45 @@
 <main class="container">
   <div class="auth-form-container">
     <h2>Preference Questionnaire</h2>
-    <form action="/questionnaire" method="post">
+    <form method="post" action="/questionnaire">
       <input type="hidden" name="userId" th:value="${user.id}" />
 
+      <h3>Fiction</h3>
+      <label><input type="checkbox" name="generosPreferidos" value="Fantasy"/> Fantasy</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Historical Fiction"/> Historical Fiction</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Horror"/> Horror</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Humor"/> Humor</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Literature"/> Literature</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Magic"/> Magic</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Mystery and detective stories"/> Mystery and detective stories</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Plays"/> Plays</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Poetry"/> Poetry</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Romance"/> Romance</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Science Fiction"/> Science Fiction</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Short Stories"/> Short Stories</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Thriller"/> Thriller</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Young Adult"/> Young Adult</label><br/>
 
-      <label for="generoFavorito">Favorite book genre:</label>
-      <select id="generoFavorito" name="generoFavorito" required>
-        <option value="" disabled selected>Select an option</option>
-        <option value="fiction">Fiction</option>
-        <option value="romance">Romance</option>
-        <option value="mystery">Mystery</option>
-      </select>
+      <h3>Business & Finance</h3>
+      <label><input type="checkbox" name="generosPreferidos" value="Management"/> Management</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Entrepreneurship"/> Entrepreneurship</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Business Economics"/> Business Economics</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Business Success"/> Business Success</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Finance"/> Finance</label><br/>
 
-      <label for="formatoPreferido">Do you prefer paper or digital books?</label>
-      <select id="formatoPreferido" name="formatoPreferido" required>
-        <option value="" disabled selected>Select an option</option>
-        <option value="paper">Paper</option>
-        <option value="digital">Digital</option>
-      </select>
-      <button type="submit">Submit Questionnaire</button>
+      <h3>Biography</h3>
+      <label><input type="checkbox" name="generosPreferidos" value="Autobiographies"/> Autobiographies</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="History"/> History</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Politics and Government"/> Politics and Government</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="World War II"/> World War II</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Women"/> Women</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Kings and Rulers"/> Kings and Rulers</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Composers"/> Composers</label><br/>
+      <label><input type="checkbox" name="generosPreferidos" value="Artists"/> Artists</label><br/>
+
+      <button type="submit">Enviar</button>
     </form>
+
   </div>
 </main>
 

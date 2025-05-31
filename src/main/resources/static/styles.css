@@ -13,23 +13,9 @@
     --footer-bg: var(--color1);
     --hero-gradient: linear-gradient(135deg, var(--color3) 0%, var(--color2) 100%);
     --cta-gradient: linear-gradient(135deg, var(--color2) 0%, var(--color5) 100%);
+    --shadow-color: rgba(0,0,0,0.1);
 }
 
-/* Dark Mode Colors */
-[data-theme="dark"] {
-    --color1: #B99099;
-    --color2: #D4B8BE;
-    --color3: #3A3335;
-    --color4: #A77A7E;
-    --color5: #C06578;
-    --text-color: #F3ECEC;
-    --bg-color: #1F1B1C;
-    --card-bg: #2A2426;
-    --nav-bg: #1F1B1C;
-    --footer-bg: #654C52;
-    --hero-gradient: linear-gradient(135deg, #3A3335 0%, #B99099 100%);
-    --cta-gradient: linear-gradient(135deg, #B99099 0%, #C06578 100%);
-}
 
 /* Base Styles */
 * {
@@ -440,6 +426,215 @@ input:checked + .slider:before {
 }
 
 .auth-form-container button:hover {
+    background: var(--color5);
+}
+.book-info {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px 40px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px var(--shadow-color);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centraliza horizontalmente tudo */
+    text-align: center;   /* centraliza o texto dentro dos elementos */
+}
+
+.book-cover img {
+    max-width: 300px;  /* limita a largura da capa */
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.book-description {
+    max-width: 600px;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--color2);
+    text-align: center; /* garante texto centralizado */
+}
+
+
+.book-info > h1 {
+    flex-basis: 100%;
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    color: var(--color5);
+    margin-bottom: 15px;
+}
+
+.book-info p {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: var(--text-color);
+    text-align: center;
+}
+
+
+.book-info strong {
+    color: var(--color4);
+}
+
+
+/* Reviews Section */
+.reviews-section {
+    max-width: 900px;
+    margin: 40px auto 60px;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 30px 40px;
+    box-shadow: 0 6px 18px var(--shadow-color);
+}
+
+.reviews-section h2 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    color: var(--color5);
+    margin-bottom: 25px;
+}
+
+#reviewsList {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 25px;
+    border-top: 1px solid var(--color3);
+    padding-top: 20px;
+}
+
+#reviewsList p {
+    padding: 12px 15px;
+    background-color: var(--color3);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    color: var(--color4);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Add Review */
+.add-review {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.add-review textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--color2);
+    resize: vertical;
+    transition: border-color 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+    background-color: var(--card-bg);
+}
+
+.add-review textarea:focus {
+    outline: none;
+    border-color: var(--color5);
+}
+
+.add-review button {
+    align-self: flex-end;
+    background: var(--color5);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-review button:hover {
+    background: var(--color2);
+}
+
+/* Buttons - example */
+button.active {
+    background-color: var(--color1) !important;
+    color: white !important;
+    box-shadow: 0 3px 10px var(--color5);
+}
+/* Pesquisa Música - styles.css adicional */
+
+.auth-form-container label {
+    font-weight: 600;
+    color: var(--color4);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.search-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#trackName {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1.5px solid var(--color2);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+    transition: border-color 0.3s;
+}
+
+#trackName:focus {
+    outline: none;
+    border-color: var(--color5);
+    box-shadow: 0 0 6px var(--color5);
+}
+
+.autocomplete-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--color2);
+    background-color: var(--card-bg);
+    max-height: 220px;
+    overflow-y: auto;
+    border-radius: 0 0 8px 8px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.autocomplete-suggestion {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: var(--color4);
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.autocomplete-suggestion:hover {
+    background-color: var(--color2);
+    color: white;
+}
+
+.auth-form-container button[type="submit"] {
+    width: 100%;
+    padding: 14px 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    background: var(--cta-gradient);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.auth-form-container button[type="submit"]:hover {
     background: var(--color5);
 }
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="${book.titulo}">Detalhes do Livro</title>
+  <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<div class="book-info">
+  <div class="book-cover">
+    <img th:src="${book.capaUrl}" alt="Capa do livro" />
+  </div>
+  <h1 th:text="${book.titulo}">Título do Livro</h1>
+
+  <p><strong>Autor:</strong> <span th:text="${book.autor}">Nome do Autor</span></p>
+  <p><strong>Gênero:</strong> <span th:text="${book.genero}">Gênero</span></p>
+  <p><strong>Data de publicação:</strong> <span th:text="${book.formattedPublishDate}"></span></p>
+  <p class="book-description" th:text="${descricao}">Descrição do livro...</p>
+</div>
+
+
+  <!-- Zona de reviews -->
+  <div class="reviews-section">
+    <h2>Reviews</h2>
+    <div id="reviewsList">
+      <p th:each="review : ${book.reviews}" th:text="${review.comment}">Review</p>
+      <p th:if="${#lists.isEmpty(book.reviews)}">Nenhuma review ainda.</p>
+    </div>
+
+    <div class="add-review">
+      <textarea id="newReview" placeholder="Escreva sua review..."></textarea>
+      <button id="submitReviewBtn">Enviar Review</button>
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+  // Simples exemplo para trocar estilos dos botões clicados
+  const favoriteBtn = document.getElementById('favoriteBtn');
+  const wantToReadBtn = document.getElementById('wantToReadBtn');
+  const readBtn = document.getElementById('readBtn');
+
+  favoriteBtn.addEventListener('click', () => {
+    favoriteBtn.classList.toggle('active');
+    // Aqui você pode fazer uma requisição ajax para salvar estado no backend
+  });
+
+  wantToReadBtn.addEventListener('click', () => {
+    wantToReadBtn.classList.toggle('active');
+  });
+
+  readBtn.addEventListener('click', () => {
+    readBtn.classList.toggle('active');
+  });
+
+  // Exemplo para enviar review - você precisa implementar backend para receber
+  document.getElementById('submitReviewBtn').addEventListener('click', () => {
+    const review = document.getElementById('newReview').value;
+    if(review.trim()) {
+      // Aqui fazer ajax para enviar review e atualizar lista
+      alert("Review enviada: " + review);
+      // Limpa textarea
+      document.getElementById('newReview').value = '';
+    }
+  });
+</script>
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

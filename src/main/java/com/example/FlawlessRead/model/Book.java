@@ -2,6 +2,8 @@ package com.example.FlawlessRead.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -15,11 +17,25 @@ public class Book {
     private String genero;
     private String capaUrl;
     private LocalDate publishDate;
+    private String key;
 
-    public Book() {
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+    // Getter and Setter for reviews
+    public List<Review> getReviews() {
+        return reviews;
     }
 
-    public Book(Long id, String titulo, String autor, String isbn, String genero, String capaUrl, LocalDate publishDate) {
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Book() {
+
+    }
+
+    public Book(Long id, String titulo, String autor, String isbn, String genero, String capaUrl, LocalDate publishDate, String key) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -27,6 +43,8 @@ public class Book {
         this.genero = genero;
         this.capaUrl = capaUrl;
         this.publishDate = publishDate;
+        this.key= key;
+
     }
 
     public Long getId() {
@@ -81,6 +99,14 @@ public class Book {
         return publishDate;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public void setPublishDate(LocalDate publishDate) {
         this.publishDate = publishDate;
     }
@@ -96,6 +122,11 @@ public class Book {
                 ", capaUrl='" + capaUrl + '\'' +
                 ", publishDate=" + publishDate +
                 '}';
+    }
+
+    public String getFormattedPublishDate() {
+        if (publishDate == null) return "";
+        return publishDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }
 
