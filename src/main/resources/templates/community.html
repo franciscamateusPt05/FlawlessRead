@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlawlessRead - Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<body>
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<section class="community-hero">
+    <div class="container">
+        <h1>Flawless Community</h1>
+        <p>Connect with fellow book lovers, share your thoughts, and discover new perspectives</p>
+    </div>
+</section>
+
+<section class="community-container container">
+    <div class="community-sidebar">
+        <div class="sidebar-section">
+            <h3>Browse by Genre</h3>
+            <ul class="genre-list">
+                <li>
+                    <a href="/community/genre/1">Fiction</a>
+                    <span class="thread-count">(42)</span>
+                </li>
+                <li>
+                    <a href="/community/genre/2">Mystery</a>
+                    <span class="thread-count">(28)</span>
+                </li>
+                <li>
+                    <a href="/community/genre/3">Romance</a>
+                    <span class="thread-count">(35)</span>
+                </li>
+                <li>
+                    <a href="/community/genre/4">Science Fiction</a>
+                    <span class="thread-count">(19)</span>
+                </li>
+                <li>
+                    <a href="/community/genre/5">Fantasy</a>
+                    <span class="thread-count">(31)</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>Popular Tags</h3>
+            <div class="tag-cloud">
+                <a href="/community/tag/bestseller" style="font-size: 1.1rem;">bestseller</a>
+                <a href="/community/tag/classic" style="font-size: 1.3rem;">classic</a>
+                <a href="/community/tag/fantasy" style="font-size: 1.0rem;">fantasy</a>
+                <a href="/community/tag/mystery" style="font-size: 0.9rem;">mystery</a>
+                <a href="/community/tag/romance" style="font-size: 1.2rem;">romance</a>
+                <a href="/community/tag/scifi" style="font-size: 0.8rem;">scifi</a>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>Your Threads</h3>
+            <ul class="user-threads">
+                <li>
+                    <a href="/community/thread/101">My favorite fantasy books</a>
+                </li>
+                <li>
+                    <a href="/community/thread/102">Recommendations for summer reading</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="community-main">
+        <div class="community-header">
+            <h2>Discussion Forums</h2>
+            <a href="/community/new-thread" class="new-thread-btn">Start New Thread</a>
+        </div>
+
+        <div class="search-box">
+            <form action="/community/search" method="get">
+                <input type="text" name="query" placeholder="Search discussions..." />
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="thread-list">
+            <div class="thread-item">
+                <div class="thread-content">
+                    <h3><a href="/community/thread/101">What's your favorite book of all time?</a></h3>
+                    <div class="thread-meta">
+                        <span class="thread-author">BookLover42</span>
+                        <span class="thread-date">Jun 15, 2023</span>
+                        <span class="thread-comments">24 comments</span>
+                    </div>
+                    <div class="thread-excerpt">Just curious what everyone considers their #1 book. I'm looking for new recommendations and want to know what books have impacted you the most...</div>
+                    <div class="thread-tags">
+                        <a href="/community/tag/favorites">favorites</a>
+                        <a href="/community/tag/discussion">discussion</a>
+                    </div>
+                </div>
+                <div class="thread-stats">
+                    <div class="stat-views">320 views</div>
+                    <div class="stat-latest">
+                        Latest: <span>Jun 20</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thread-item">
+                <div class="thread-content">
+                    <h3><a href="/community/thread/102">New releases this month - June 2023</a></h3>
+                    <div class="thread-meta">
+                        <span class="thread-author">LiteraryExplorer</span>
+                        <span class="thread-date">Jun 1, 2023</span>
+                        <span class="thread-comments">18 comments</span>
+                    </div>
+                    <div class="thread-excerpt">Let's discuss the most anticipated books coming out this month. I'm particularly excited about the new Margaret Atwood novel...</div>
+                    <div class="thread-tags">
+                        <a href="/community/tag/newreleases">newreleases</a>
+                        <a href="/community/tag/2023">2023</a>
+                    </div>
+                </div>
+                <div class="thread-stats">
+                    <div class="stat-views">245 views</div>
+                    <div class="stat-latest">
+                        Latest: <span>Jun 18</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thread-item">
+                <div class="thread-avatar">
+                </div>
+                <div class="thread-content">
+                    <h3><a href="/community/thread/103">Underrated books that deserve more attention</a></h3>
+                    <div class="thread-meta">
+                        <span class="thread-author">PageTurner</span>
+                        <span class="thread-date">May 28, 2023</span>
+                        <span class="thread-comments">32 comments</span>
+                    </div>
+                    <div class="thread-excerpt">Share your favorite hidden gems - those amazing books that didn't get the recognition they deserved. I'll start with "The Shadow of the Wind" by Carlos Ruiz Zafón...</div>
+                    <div class="thread-tags">
+                        <a href="/community/tag/underrated">underrated</a>
+                        <a href="/community/tag/recommendations">recommendations</a>
+                    </div>
+                </div>
+                <div class="thread-stats">
+                    <div class="stat-views">410 views</div>
+                    <div class="stat-latest">
+                        Latest: <span>Jun 19</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <a href="/community?page=1" class="disabled">First</a>
+            <a href="/community?page=1" class="disabled">Previous</a>
+
+            <a href="/community?page=1" class="active">1</a>
+            <a href="/community?page=2">2</a>
+            <a href="/community?page=3">3</a>
+
+            <a href="/community?page=2">Next</a>
+            <a href="/community?page=3">Last</a>
+        </div>
+    </div>
+</section>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

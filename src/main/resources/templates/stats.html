@@ -1,10 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reading Statistics - FlawlessRead</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
 </head>
 <body>
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<div class="stats-container">
+    <h2>My Statistics</h2>
+
+    <!-- Goal vs Read -->
+    <div class="chart-box">
+        <canvas id="goalChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Reading history (time series) -->
+    <div class="chart-box">
+        <canvas id="historyChart" width="800" height="300"></canvas>
+    </div>
+
+    <!-- Books by genre -->
+    <div class="chart-box">
+        <canvas id="genreChart" width="400" height="300"></canvas>
+    </div>
+
+    <!-- Challenges -->
+    <div class="challenge-box" th:text="${challengeStatus}">Loading challenge status...</div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const totalRead = [[${totalRead}]];
+    const readingGoal = [[${readingGoal}]];
+    const readingHistory = /*[[${readingHistoryJson}]]*/ '{}';
+    const booksByGenre = /*[[${booksByGenreJson}]]*/ '{}';
+
+    const historyData = JSON.parse(readingHistory);
+    const genreData = JSON.parse(booksByGenre);
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const color1 = rootStyles.getPropertyValue('--color1').trim();
+    const color2 = rootStyles.getPropertyValue('--color2').trim();
+    const color3 = rootStyles.getPropertyValue('--color1').trim();
+    const color4 = rootStyles.getPropertyValue('--color4').trim();
+    const color5 = rootStyles.getPropertyValue('--color5').trim();
+
+    // 1) Goal vs books read chart
+    const ctxGoal = document.getElementById('goalChart').getContext('2d');
+    const goalChart = new Chart(ctxGoal, {
+        type: 'doughnut',
+        data: {
+            labels: ['Read', 'Remaining'],
+            datasets: [{
+                label: 'Reading Goal',
+                data: [totalRead, Math.max(readingGoal - totalRead, 0)],
+                backgroundColor: [color5, color3],
+                hoverOffset: 30
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                title: { display: true, text: 'Books Read vs Goal' }
+            }
+        }
+    });
+
+    // 2) Reading history chart (line)
+    const ctxHistory = document.getElementById('historyChart').getContext('2d');
+    const labelsHistory = Object.keys(historyData);
+    const valuesHistory = Object.values(historyData);
+
+    const historyChart = new Chart(ctxHistory, {
+        type: 'line',
+        data: {
+            labels: labelsHistory,
+            datasets: [{
+                label: 'Cumulative Books Read',
+                data: valuesHistory,
+                borderColor: color5,
+                backgroundColor: color3 + '80',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, stepSize: 1 }
+            },
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Reading History' }
+            }
+        }
+    });
+
+    // 3) Books by genre (pie chart)
+    const ctxGenre = document.getElementById('genreChart').getContext('2d');
+    const labelsGenre = Object.keys(genreData);
+    const valuesGenre = Object.values(genreData);
+
+    const genreChart = new Chart(ctxGenre, {
+        type: 'pie',
+        data: {
+            labels: labelsGenre,
+            datasets: [{
+                label: 'Books by Genre',
+                data: valuesGenre,
+                backgroundColor: [
+                    color5, color2, color1, color4, color3
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'right' },
+                title: { display: true, text: 'Books by Genre' }
+            }
+        }
+    });
+    /*]]>*/
+</script>
 
 </body>
 </html>

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.logging.Formatter;
 
 @Entity
 public class UserBook {
@@ -66,5 +67,7 @@ public class UserBook {
     public void setDataAdicionado(LocalDate dataAdicionado) {
         this.dataAdicionado = dataAdicionado;
     }
+
+
 }
 
