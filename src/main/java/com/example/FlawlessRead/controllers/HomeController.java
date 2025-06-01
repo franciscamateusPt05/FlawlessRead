@@ -1,24 +1,20 @@
 package com.example.FlawlessRead.controllers;
 
 import com.example.FlawlessRead.model.Book;
-import com.example.FlawlessRead.model.BookNewest;
-import com.example.FlawlessRead.model.BookTrending;
+import com.example.FlawlessRead.model.Questionnaire;
 import com.example.FlawlessRead.model.User;
-import com.example.FlawlessRead.repository.BookNewestRepository;
-import com.example.FlawlessRead.repository.BookTrendingRepository;
 import com.example.FlawlessRead.repository.QuestionnaireRepository;
 import com.example.FlawlessRead.repository.UserRepository;
-import com.example.FlawlessRead.service.OpenLibraryService;
+import com.example.FlawlessRead.service.BookService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,45 +22,64 @@ import java.util.Optional;
 public class HomeController {
 
     private final QuestionnaireRepository questionnaireRepository;
-    private final BookTrendingRepository bookTrendingRepository;
     private final UserRepository userRepository;
-    private final BookNewestRepository bookNewestRepository;
+    private final BookService bookService;
 
-    public HomeController(QuestionnaireRepository questionnaireRepository,  BookTrendingRepository bookTrendingRepository, UserRepository userRepository, BookNewestRepository bookNewestRepository) {
+    public HomeController(QuestionnaireRepository questionnaireRepository,
+                          UserRepository userRepository,
+                          BookService bookService) {
         this.questionnaireRepository = questionnaireRepository;
-        this.bookTrendingRepository = bookTrendingRepository;
         this.userRepository = userRepository;
-        this.bookNewestRepository = bookNewestRepository;
+        this.bookService = bookService;
     }
 
     @GetMapping("/")
-    public String showHome(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        // Usa userDetails para identificar o user autenticado
+    public String showHome(@AuthenticationPrincipal UserDetails userDetails, Model model, HttpSession session) {
         if (userDetails == null) {
-            return "redirect:/login";  // fallback (não deveria chegar aqui porque o Security trata disso)
+            return "redirect:/login";
         }
 
         String username = userDetails.getUsername();
 
-        // Busca o user e dados para o modelo, por exemplo o questionário
-        // Exemplo de código, adapta ao teu repositório
-        Optional<User> user = userRepository.findByUsername(username) ;
-        var questionnaire = questionnaireRepository.findByUser(user);
-        String genero = questionnaire.getGenerosPreferidos();
+        Optional<User> user = userRepository.findByUsername(username);
 
-        List<BookTrending> trendingBooks = (List<BookTrending>) bookTrendingRepository.findByGenero(genero);
-        List<BookNewest> newBooks = (List<BookNewest>) bookNewestRepository.findByGenero(genero);
+        Questionnaire questionnaire = questionnaireRepository.findByUser(user);
+
+        String generosString = questionnaire.getGenerosPreferidos();
+        List<String> generos = generosString == null || generosString.isEmpty()
+                ? List.of()
+                : List.of(generosString.split(","));
+
+        // Buscar trending (ordenar por relevância) e novidades (ordenar por "new" ou data)
+        List<Book> trendingBooks = bookService.fetchBooksByGenres(generos);
+        if (trendingBooks.size() > 10) {
+            trendingBooks = trendingBooks.subList(0, 10);
+        }
+
+        List<Book> newBooks = bookService.fetchBooksByGenres(generos, "new");
+        if (newBooks.size() > 10) {
+            newBooks = newBooks.subList(0, 10);
+        }
 
 
+        List<Book> books = new ArrayList<>(trendingBooks);
+        books.addAll(newBooks);
+        model.addAttribute("books", books);
+        session.setAttribute("books", books);
 
         model.addAttribute("user", user);
         model.addAttribute("trendingBooks", trendingBooks);
         model.addAttribute("newBooks", newBooks);
-        model.addAttribute("genero", genero);
+        model.addAttribute("generos", generos);
 
         return "home";
     }
 
-
+    @GetMapping("/testAuth")
+    @ResponseBody
+    public String testAuth(@AuthenticationPrincipal User user) {
+        if (user == null) return "Usuário não autenticado";
+        return "Usuário autenticado: " + user.getUsername();
+    }
 
 }

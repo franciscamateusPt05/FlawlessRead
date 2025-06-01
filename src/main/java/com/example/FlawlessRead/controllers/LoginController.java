@@ -44,6 +44,7 @@ public class LoginController {
 
             // Verifica se a password bate certo com a encriptada
             if (passwordEncoder.matches(password, user.getPassword())) {
+                model.addAttribute("user", user);
                 session.setAttribute("user", user); // guarda na sessão
                 return "redirect:/"; // vai para home
             }

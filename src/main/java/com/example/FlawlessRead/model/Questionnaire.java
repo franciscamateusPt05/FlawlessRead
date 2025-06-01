@@ -14,6 +14,8 @@ public class Questionnaire {
     // Guarda os géneros preferidos separados por vírgula (simplificação)
     private String generosPreferidos;
 
+    private Integer goalBook;
+
     public Long getId() {
         return id;
     }
@@ -36,5 +38,13 @@ public class Questionnaire {
 
     public void setGenerosPreferidos(String generosPreferidos) {
         this.generosPreferidos = generosPreferidos;
+    }
+
+    public Integer getGoalBook() {
+        return goalBook;
+    }
+
+    public void setGoalBook(Integer goalBook) {
+        this.goalBook = goalBook;
     }
 }

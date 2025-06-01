@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +16,7 @@ public class Book {
     private String genero;
     private String capaUrl;
     private LocalDate publishDate;
-    private String key;
+    private String book_key;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Review> reviews;
@@ -43,7 +42,7 @@ public class Book {
         this.genero = genero;
         this.capaUrl = capaUrl;
         this.publishDate = publishDate;
-        this.key= key;
+        this.book_key= key;
 
     }
 
@@ -100,11 +99,11 @@ public class Book {
     }
 
     public String getKey() {
-        return key;
+        return book_key;
     }
 
     public void setKey(String key) {
-        this.key = key;
+        this.book_key = key;
     }
 
     public void setPublishDate(LocalDate publishDate) {

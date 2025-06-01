@@ -1,257 +1,77 @@
 {
-
-    "Fantasy": {
-      "music_styles": ["ambient", "classical", "soundtracks", "folk", "electronic"],
-      "audio_features": {
-        "danceability": [0.2, 0.5],
-        "energy": [0.3, 0.6],
-        "valence": [0.4, 0.7],
-        "acousticness": [0.3, 0.7],
-        "instrumentalness": [0.4, 0.8]
-      }
-    },
-    "Historical Fiction": {
-      "music_styles": ["folk", "classical", "blues", "acoustic", "jazz"],
-      "audio_features": {
-        "danceability": [0.3, 0.5],
-        "energy": [0.3, 0.5],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.5, 0.8],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Horror": {
-      "music_styles": ["dark-ambient", "industrial", "black-metal", "soundtracks", "electronic"],
-      "audio_features": {
-        "danceability": [0.1, 0.4],
-        "energy": [0.5, 0.8],
-        "valence": [0.0, 0.3],
-        "acousticness": [0.0, 0.3],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Humor": {
-      "music_styles": ["comedy", "pop", "indie", "funk", "british"],
-      "audio_features": {
-        "danceability": [0.6, 0.9],
-        "energy": [0.5, 0.8],
-        "valence": [0.6, 0.9],
-        "acousticness": [0.1, 0.4],
-        "instrumentalness": [0.0, 0.2]
-      }
-    },
-    "Literature": {
-      "music_styles": ["classical", "jazz", "folk", "singer-songwriter", "acoustic"],
-      "audio_features": {
-        "danceability": [0.2, 0.5],
-        "energy": [0.3, 0.6],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.4, 0.7],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Magic": {
-      "music_styles": ["ambient", "electronic", "soundtracks", "classical"],
-      "audio_features": {
-        "danceability": [0.2, 0.5],
-        "energy": [0.3, 0.7],
-        "valence": [0.4, 0.7],
-        "acousticness": [0.3, 0.6],
-        "instrumentalness": [0.5, 0.8]
-      }
-    },
-    "Mystery and detective stories": {
-      "music_styles": ["jazz", "blues", "ambient", "electronic", "soundtracks"],
-      "audio_features": {
-        "danceability": [0.3, 0.6],
-        "energy": [0.4, 0.7],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.2, 0.5],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Plays": {
-      "music_styles": ["classical", "soundtracks", "jazz", "acoustic", "singer-songwriter"],
-      "audio_features": {
-        "danceability": [0.2, 0.5],
-        "energy": [0.3, 0.6],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.4, 0.7],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Poetry": {
-      "music_styles": ["acoustic", "jazz", "folk", "classical", "singer-songwriter"],
-      "audio_features": {
-        "danceability": [0.1, 0.4],
-        "energy": [0.2, 0.5],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.5, 0.9],
-        "instrumentalness": [0.3, 0.8]
-      }
-    },
-    "Romance": {
-      "music_styles": ["pop", "r-n-b", "soul", "acoustic", "indie-pop"],
-      "audio_features": {
-        "danceability": [0.4, 0.7],
-        "energy": [0.3, 0.6],
-        "valence": [0.6, 0.9],
-        "acousticness": [0.3, 0.6],
-        "instrumentalness": [0.0, 0.3]
-      }
-    },
-    "Science Fiction": {
-      "music_styles": ["electronic", "ambient", "soundtracks", "idm", "techno"],
-      "audio_features": {
-        "danceability": [0.3, 0.6],
-        "energy": [0.4, 0.8],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.0, 0.3],
-        "instrumentalness": [0.5, 0.9]
-      }
-    },
-    "Short Stories": {
-      "music_styles": ["indie", "folk", "acoustic", "jazz", "classical"],
-      "audio_features": {
-        "danceability": [0.3, 0.6],
-        "energy": [0.3, 0.6],
-        "valence": [0.3, 0.7],
-        "acousticness": [0.3, 0.7],
-        "instrumentalness": [0.2, 0.6]
-      }
-    },
-    "Thriller": {
-      "music_styles": ["electronic", "industrial", "rock", "hard-rock", "soundtracks"],
-      "audio_features": {
-        "danceability": [0.4, 0.7],
-        "energy": [0.6, 0.9],
-        "valence": [0.2, 0.5],
-        "acousticness": [0.0, 0.3],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Young Adult": {
-      "music_styles": ["pop", "indie-pop", "alternative", "emo", "rock"],
-      "audio_features": {
-        "danceability": [0.5, 0.8],
-        "energy": [0.5, 0.8],
-        "valence": [0.4, 0.8],
-        "acousticness": [0.1, 0.5],
-        "instrumentalness": [0.0, 0.3]
-      }
-    }
-  ,
-
-    "Management": {
-      "music_styles": ["chill", "jazz", "lounge", "deep-house", "classical"],
-      "audio_features": {
-        "danceability": [0.4, 0.7],
-        "energy": [0.3, 0.6],
-        "valence": [0.4, 0.7],
-        "acousticness": [0.1, 0.4],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Entrepreneurship": {
-      "music_styles": ["electronic", "house", "dance", "pop", "funk"],
-      "audio_features": {
-        "danceability": [0.6, 0.9],
-        "energy": [0.6, 0.9],
-        "valence": [0.5, 0.8],
-        "acousticness": [0.0, 0.3],
-        "instrumentalness": [0.0, 0.3]
-      }
-    },
-    "Business Economics": {
-      "music_styles": ["classical", "jazz", "ambient", "lounge", "deep-house"],
-      "audio_features": {
-        "danceability": [0.3, 0.6],
-        "energy": [0.3, 0.6],
-        "valence": [0.4, 0.7],
-        "acousticness": [0.2, 0.5],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Business Success": {
-      "music_styles": ["pop", "dance", "house", "electronic", "funk"],
-      "audio_features": {
-        "danceability": [0.7, 0.95],
-        "energy": [0.7, 0.95],
-        "valence": [0.6, 0.9],
-        "acousticness": [0.0, 0.2],
-        "instrumentalness": [0.0, 0.2]
-      }
-    },
-    "Finance": {
-      "music_styles": ["jazz", "classical", "ambient", "chill", "deep-house"],
-      "audio_features": {
-        "danceability": [0.3, 0.6],
-        "energy": [0.3, 0.6],
-        "valence": [0.4, 0.7],
-        "acousticness": [0.2, 0.5],
-        "instrumentalness": [0.3, 0.7]
-      }
-    }
-  ,
-    "Autobiographies": {
-      "music_styles": ["acoustic", "folk", "jazz", "blues", "singer-songwriter"],
-      "audio_features": {
-        "danceability": [0.2, 0.5],
-        "energy": [0.2, 0.5],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.5, 0.9],
-        "instrumentalness": [0.2, 0.6]
-      }
-    },
-    "History": {
-      "music_styles": ["classical", "folk", "blues", "acoustic", "jazz"],
-      "audio_features": {
-        "danceability": [0.3, 0.5],
-        "energy": [0.3, 0.5],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.5, 0.8],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "Politics and Government": {
-      "music_styles": ["classical", "ambient", "jazz", "folk", "soundtracks"],
-      "audio_features": {
-        "danceability": [0.3, 0.5],
-        "energy": [0.4, 0.7],
-        "valence": [0.3, 0.6],
-        "acousticness": [0.3, 0.6],
-        "instrumentalness": [0.3, 0.7]
-      }
-    },
-    "World War II": {
-      "music_styles": ["classical", "soundtracks", "folk", "blues"],
-      "audio_features": {
-        "danceability": [0.2, 0.5],
-        "energy": [0.4, 0.7],
-        "valence": [0.2, 0.5],
-        "acousticness": [0.4, 0.7],
-        "instrumentalness": [0.4, 0.8]
-      }
-    },
-    "Women": {
-      "music_styles": ["pop", "indie-pop", "acoustic", "soul", "r-n-b"],
-      "audio_features": {
-        "danceability": [0.4, 0.7],
-        "energy": [0.3, 0.6],
-        "valence": [0.5, 0.8],
-        "acousticness": [0.3, 0.6],
-        "instrumentalness": [0.0, 0.3]
-      }
-    },
-    "Kings and Rulers": {
-      "music_styles": ["classical", "opera", "folk", "soundtracks"],
-      "audio_features": {
-        "danceability": [0.2, 0.4],
-        "energy": [0.3, 0.6],
-        "valence": [0.3, 0.5],
-        "acousticness": [0.4, 0.7],
-        "instrumentalness": [0.4, 0.8]
-      }
-    }
+  "fantasy": {
+    "music_styles": ["ambient", "classical", "soundtracks", "folk", "electronic"]
+  },
+  "historical fiction": {
+    "music_styles": ["folk", "classical", "blues", "acoustic", "jazz"]
+  },
+  "horror": {
+    "music_styles": ["dark-ambient", "industrial", "black-metal", "soundtracks", "electronic"]
+  },
+  "humor": {
+    "music_styles": ["comedy", "pop", "indie", "funk", "british"]
+  },
+  "literature": {
+    "music_styles": ["classical", "jazz", "folk", "singer-songwriter", "acoustic"]
+  },
+  "magic": {
+    "music_styles": ["ambient", "electronic", "soundtracks", "classical"]
+  },
+  "mystery and detective stories": {
+    "music_styles": ["jazz", "blues", "ambient", "electronic", "soundtracks"]
+  },
+  "plays": {
+    "music_styles": ["classical", "soundtracks", "jazz", "acoustic", "singer-songwriter"]
+  },
+  "poetry": {
+    "music_styles": ["acoustic", "jazz", "folk", "classical", "singer-songwriter"]
+  },
+  "romance": {
+    "music_styles": ["pop", "r-n-b", "soul", "acoustic", "indie-pop"]
+  },
+  "science fiction": {
+    "music_styles": ["electronic", "ambient", "soundtracks", "idm", "techno"]
+  },
+  "short stories": {
+    "music_styles": ["indie", "folk", "acoustic", "jazz", "classical"]
+  },
+  "thriller": {
+    "music_styles": ["electronic", "industrial", "rock", "hard-rock", "soundtracks"]
+  },
+  "young adult": {
+    "music_styles": ["pop", "indie-pop", "alternative", "emo", "rock"]
+  },
+  "management": {
+    "music_styles": ["chill", "jazz", "lounge", "deep-house", "classical"]
+  },
+  "entrepreneurship": {
+    "music_styles": ["electronic", "house", "dance", "pop", "funk"]
+  },
+  "business economics": {
+    "music_styles": ["classical", "jazz", "ambient", "lounge", "deep-house"]
+  },
+  "business success": {
+    "music_styles": ["pop", "dance", "house", "electronic", "funk"]
+  },
+  "finance": {
+    "music_styles": ["jazz", "classical", "ambient", "chill", "deep-house"]
+  },
+  "autobiographies": {
+    "music_styles": ["acoustic", "folk", "jazz", "blues", "singer-songwriter"]
+  },
+  "history": {
+    "music_styles": ["classical", "folk", "blues", "acoustic", "jazz"]
+  },
+  "politics and government": {
+    "music_styles": ["classical", "ambient", "jazz", "folk", "soundtracks"]
+  },
+  "world war ii": {
+    "music_styles": ["classical", "soundtracks", "folk", "blues"]
+  },
+  "women": {
+    "music_styles": ["pop", "indie-pop", "acoustic", "soul", "r-n-b"]
+  },
+  "kings and rulers": {
+    "music_styles": ["classical", "opera", "folk", "soundtracks"]
   }
-
+}

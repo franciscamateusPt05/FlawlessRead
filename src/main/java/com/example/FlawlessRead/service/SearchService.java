@@ -1,11 +1,9 @@
 package com.example.FlawlessRead.service;
 
-import com.example.FlawlessRead.model.AudioFeatures;
 import com.example.FlawlessRead.model.Book;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -47,35 +45,48 @@ public class SearchService {
                 );
     }
 
-    public Mono<AudioFeatures> getAudioFeatures(String trackId) {
-        return fetchFromSpotify("/audio-features/" + trackId)
-                .map(node -> new AudioFeatures(
-                        node.get("danceability").asDouble(),
-                        node.get("energy").asDouble(),
-                        node.get("valence").asDouble(),
-                        node.get("acousticness").asDouble(),
-                        node.get("instrumentalness").asDouble()
-                ));
-    }
+    public Mono<Set<String>> getGenresFromArtistAndTrack(String trackId, String artistId) {
+        Mono<Set<String>> artistGenresMono = getArtistGenres(artistId)
+                .doOnNext(genres -> System.out.println("Gêneros do artista principal (" + artistId + "): " + genres));
 
-    public Mono<List<String>> getArtistGenres(String artistId) {
-        return fetchFromSpotify("/artists/" + artistId)
-                .map(node -> {
-                    List<String> genres = new ArrayList<>();
-                    node.get("genres").forEach(g -> genres.add(g.asText()));
-                    return genres;
+        Mono<Set<String>> additionalArtistsGenresMono = fetchFromSpotify("/tracks/" + trackId)
+                .flatMap(trackNode -> {
+                    List<String> additionalArtistIds = new ArrayList<>();
+                    trackNode.path("artists").forEach(artist -> {
+                        String id = artist.path("id").asText();
+                        if (!id.equals(artistId)) {
+                            additionalArtistIds.add(id);
+                        }
+                    });
+
+                    return Flux.fromIterable(additionalArtistIds)
+                            .flatMap(this::getArtistGenres)
+                            .flatMapIterable(genres -> genres)
+                            .collect(Collectors.toSet())
+                            .doOnNext(genres -> System.out.println("Gêneros dos artistas adicionais: " + genres));
+                });
+
+        return Mono.zip(artistGenresMono, additionalArtistsGenresMono)
+                .map(tuple -> {
+                    Set<String> combined = new HashSet<>(tuple.getT1());
+                    combined.addAll(tuple.getT2());
+                    System.out.println("Gêneros combinados do artista e track: " + combined);
+                    return combined;
                 });
     }
 
-    public Mono<List<String>> identifySubjects(AudioFeatures features, List<String> artistGenres) {
+    public Mono<List<String>> identifySubjects(Set<String> combinedGenres) {
         return Mono.fromCallable(() -> {
+            System.out.println("Identificando subjects a partir dos gêneros: " + combinedGenres);
             InputStream is = getClass().getResourceAsStream("/static/mapping.json");
             if (is == null) {
                 throw new RuntimeException("Could not load mapping.json");
             }
 
             JsonNode mapping = objectMapper.readTree(is);
-            List<String> matchedSubjects = new ArrayList<>();
+
+            // Map<subject, score>
+            Map<String, Integer> subjectScores = new HashMap<>();
 
             mapping.fields().forEachRemaining(entry -> {
                 String subject = entry.getKey();
@@ -84,54 +95,92 @@ public class SearchService {
                         subjectNode.get("music_styles"),
                         new TypeReference<List<String>>() {}
                 );
-                JsonNode af = subjectNode.get("audio_features");
 
                 int score = 0;
-                if (!Collections.disjoint(styles, artistGenres)) score++;
-                if (matchesFeatures(features, af)) score++;
+                for (String style : styles) {
+                    if (combinedGenres.contains(style.toLowerCase())) {
+                        score++;
+                        System.out.println("Match parcial para subject " + subject + " pelo estilo: " + style);
+                    }
+                }
 
-                if (score >= 1) matchedSubjects.add(subject);
+                if (score > 0) {
+                    subjectScores.put(subject, score);
+                    System.out.println("Subject " + subject + " com score: " + score);
+                }
             });
 
+            // Ordenar pelo score descrescente
+            List<String> matchedSubjects = subjectScores.entrySet().stream()
+                    .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+
+            // Se não encontrou nenhum com score > 0, pode retornar todos ou algum padrão
+            if (matchedSubjects.isEmpty()) {
+                System.out.println("Nenhum subject encontrado com interseção, retornando todos os subjects.");
+                matchedSubjects = new ArrayList<>();
+                mapping.fieldNames().forEachRemaining(matchedSubjects::add);
+            }
+
+            System.out.println("Subjects identificados finais ordenados por prioridade: " + matchedSubjects);
             return matchedSubjects;
         });
     }
 
-    private boolean matchesFeatures(AudioFeatures features, JsonNode featureRanges) {
-        return featureInRange(features.getDanceability(), featureRanges.get("danceability")) &&
-                featureInRange(features.getEnergy(), featureRanges.get("energy")) &&
-                featureInRange(features.getValence(), featureRanges.get("valence")) &&
-                featureInRange(features.getAcousticness(), featureRanges.get("acousticness")) &&
-                featureInRange(features.getInstrumentalness(), featureRanges.get("instrumentalness"));
-    }
 
-    private boolean featureInRange(double value, JsonNode range) {
-        return value >= range.get(0).asDouble() && value <= range.get(1).asDouble();
+
+    public Mono<Set<String>> getArtistGenres(String artistId) {
+        return fetchFromSpotify("/artists/" + artistId)
+                .map(node -> {
+                    Set<String> genres = new HashSet<>();
+                    node.get("genres").forEach(g -> genres.add(g.asText()));
+                    return genres;
+                });
     }
 
     public Mono<List<Book>> fetchBooksFromOpenLibrary(List<String> subjects) {
         return Flux.fromIterable(subjects)
                 .flatMap(subject -> {
-                    String url = OPEN_LIBRARY_API_BASE + "/subjects/" + subject.toLowerCase().replace(" ", "_") + ".json?limit=5";
+                    String formattedSubject = subject.toLowerCase().replace(" ", "_");
+                    String url = String.format("%s/subjects/%s.json?limit=5", OPEN_LIBRARY_API_BASE, formattedSubject);
+
                     return webClient.get()
                             .uri(url)
                             .accept(MediaType.APPLICATION_JSON)
                             .retrieve()
                             .bodyToMono(JsonNode.class)
-                            .onErrorResume(e -> Mono.empty()) // ignora erros individuais
-                            .flatMapMany(response -> {
-                                if (response == null || !response.has("works")) {
-                                    return Flux.empty();
-                                }
+                            .onErrorResume(e -> Mono.empty())
+                            .flatMapMany(json -> {
+                                if (json == null || !json.has("works")) return Flux.empty();
 
-                                return Flux.fromIterable(response.get("works"))
+                                return Flux.fromIterable(json.get("works"))
                                         .map(work -> {
-                                            String title = work.path("title").asText("Unknown Title");
-                                            String author = work.path("authors").path(0).path("name").asText("Unknown Author");
-                                            String isbn = work.path("isbn").path(0).asText(null);
-                                            String coverId = work.path("cover_id").asText(null);
+                                            String title = work.path("title").asText("Sem título");
+
+                                            String author = "Desconhecido";
+                                            if (work.has("authors") && work.get("authors").isArray() && work.get("authors").size() > 0) {
+                                                author = work.get("authors").get(0).path("name").asText("Desconhecido");
+                                            }
+
+                                            String isbn = "";
+                                            if (work.has("isbn") && work.get("isbn").isArray() && work.get("isbn").size() > 0) {
+                                                isbn = work.get("isbn").get(0).asText();
+                                            }
+
+                                            if (isbn.isEmpty()) {
+                                                isbn = "unknown_" + UUID.randomUUID();
+                                            }
+
                                             String key = work.path("key").asText(null);
                                             int publishYear = work.path("first_publish_year").asInt(0);
+                                            LocalDate dataPublicacao = null;
+                                            if (publishYear >= 1000 && publishYear <= LocalDate.now().getYear()) {
+                                                dataPublicacao = LocalDate.of(publishYear, 1, 1);
+                                            }
+
+                                            String coverId = work.has("cover_id") ? work.get("cover_id").asText(null) : null;
+                                            String capaUrl = coverId != null ? "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg" : null;
 
                                             return new Book(
                                                     UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE,
@@ -139,23 +188,27 @@ public class SearchService {
                                                     author,
                                                     isbn,
                                                     subject,
-                                                    coverId != null ? "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg" : null,
-                                                    publishYear > 0 ? LocalDate.of(publishYear, 1, 1) : null,
+                                                    capaUrl,
+                                                    dataPublicacao,
                                                     key
                                             );
                                         });
                             });
                 })
-                .collectList();
+                .distinct(Book::getKey)
+                .collectList()
+                .map(bookList -> {
+                    bookList.sort(Comparator.comparing(
+                            Book::getPublishDate,
+                            Comparator.nullsLast(Comparator.reverseOrder())
+                    ));
+                    return bookList;
+                });
     }
 
     public Mono<List<Book>> processMusicToBooks(String trackId, String artistId) {
-        return Mono.zip(getAudioFeatures(trackId), getArtistGenres(artistId))
-                .flatMap(tuple -> {
-                    AudioFeatures features = tuple.getT1();
-                    List<String> genres = tuple.getT2();
-                    return identifySubjects(features, genres);
-                })
+        return getGenresFromArtistAndTrack(trackId, artistId)
+                .flatMap(this::identifySubjects)
                 .flatMap(this::fetchBooksFromOpenLibrary);
     }
 

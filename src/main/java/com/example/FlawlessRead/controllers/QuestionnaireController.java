@@ -31,9 +31,11 @@ public class QuestionnaireController {
     public String processQuestionnaire(
             @RequestParam Long userId,
             @RequestParam(name = "generosPreferidos", required = false) String[] generosPreferidos,
+            @RequestParam(name = "goalBook", required = false) Integer goalBook,
             Model model) {
 
-        User currentUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User currentUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setUser(currentUser);
@@ -45,10 +47,17 @@ public class QuestionnaireController {
             questionnaire.setGenerosPreferidos("");
         }
 
+        if (goalBook != null) {
+            questionnaire.setGoalBook(goalBook);
+        } else {
+            questionnaire.setGoalBook(0); // Ou outro default
+        }
+
         questionnaireRepository.save(questionnaire);
 
         return "redirect:/login";
     }
+
 
 
 }

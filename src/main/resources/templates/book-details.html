@@ -18,56 +18,188 @@
   <p><strong>Gênero:</strong> <span th:text="${book.genero}">Gênero</span></p>
   <p><strong>Data de publicação:</strong> <span th:text="${book.formattedPublishDate}"></span></p>
   <p class="book-description" th:text="${descricao}">Descrição do livro...</p>
+
+  <!-- Botões "Quero Ler" e "Já Li" com ícones simples e data-index -->
+  <div class="reading-status-buttons">
+    <button id="wantToReadBtn" title="Quero Ler" aria-label="Quero Ler" th:attr="data-index=${index}">
+      📚 Quero Ler
+    </button>
+    <button id="readBtn" title="Já Li" aria-label="Já Li" th:attr="data-index=${index}">
+      ✔️ Já Li
+    </button>
+  </div>
 </div>
 
+<!-- Zona de reviews -->
+<div class="reviews-section">
+  <h2>Reviews</h2>
+  <div id="reviewsList">
 
-  <!-- Zona de reviews -->
-  <div class="reviews-section">
-    <h2>Reviews</h2>
-    <div id="reviewsList">
-      <p th:each="review : ${book.reviews}" th:text="${review.comment}">Review</p>
-      <p th:if="${#lists.isEmpty(book.reviews)}">Nenhuma review ainda.</p>
+    <div th:each="review : ${reviews}" class="review-item">
+      <div class="review-header">
+        <span class="review-username" th:text="${review.user.username}">Username</span>
+        <div class="review-rating" th:attr="data-review-id=${review.id},data-rating=${review.rating}">
+          <span th:each="starVal : ${#numbers.sequence(1,5)}"
+                class="star"
+                th:classappend="${starVal <= review.rating} ? ' filled' : ''">★</span>
+        </div>
+      </div>
+
+      <p class="review-comment" th:text="${review.comment}">Review</p>
     </div>
 
-    <div class="add-review">
-      <textarea id="newReview" placeholder="Escreva sua review..."></textarea>
-      <button id="submitReviewBtn">Enviar Review</button>
+    <p th:if="${#lists.isEmpty(reviews)}" class="no-reviews">Nenhuma review ainda.</p>
+  </div>
+</div>
+
+  <div class="add-review">
+
+    <div id="userRating" class="user-rating">
+      <span class="star" data-value="1">☆</span>
+      <span class="star" data-value="2">☆</span>
+      <span class="star" data-value="3">☆</span>
+      <span class="star" data-value="4">☆</span>
+      <span class="star" data-value="5">☆</span>
     </div>
+    <textarea id="newReview" placeholder="Escreva sua review..."></textarea>
+
+    <button id="submitReviewBtn" th:attr="data-index=${index}">Enviar Review</button>
   </div>
 
 </div>
 
-
 <script>
-  // Simples exemplo para trocar estilos dos botões clicados
-  const favoriteBtn = document.getElementById('favoriteBtn');
+  // Botões Quero Ler e Já Li
   const wantToReadBtn = document.getElementById('wantToReadBtn');
   const readBtn = document.getElementById('readBtn');
 
-  favoriteBtn.addEventListener('click', () => {
-    favoriteBtn.classList.toggle('active');
-    // Aqui você pode fazer uma requisição ajax para salvar estado no backend
-  });
-
   wantToReadBtn.addEventListener('click', () => {
-    wantToReadBtn.classList.toggle('active');
+    const index = wantToReadBtn.getAttribute('data-index');
+    fetch(`/books/${index}/wantToRead`, {
+      method: 'POST',
+      credentials: 'same-origin'
+    })
+            .then(response => {
+              if (response.ok) {
+                wantToReadBtn.classList.add('active');
+                alert('Livro marcado como Quero Ler!');
+              } else {
+                alert('Erro ao marcar livro como Quero Ler.');
+              }
+            })
+            .catch(() => alert('Erro na requisição.'));
   });
 
   readBtn.addEventListener('click', () => {
-    readBtn.classList.toggle('active');
+    const index = readBtn.getAttribute('data-index');
+    fetch(`/books/${index}/alreadyRead`, {
+      method: 'POST',
+      credentials: 'same-origin'
+    })
+            .then(response => {
+              if (response.ok) {
+                readBtn.classList.add('active');
+                alert('Livro marcado como Já Li!');
+              } else {
+                alert('Erro ao marcar livro como Já Li.');
+              }
+            })
+            .catch(() => alert('Erro na requisição.'));
   });
 
-  // Exemplo para enviar review - você precisa implementar backend para receber
-  document.getElementById('submitReviewBtn').addEventListener('click', () => {
-    const review = document.getElementById('newReview').value;
-    if(review.trim()) {
-      // Aqui fazer ajax para enviar review e atualizar lista
-      alert("Review enviada: " + review);
-      // Limpa textarea
-      document.getElementById('newReview').value = '';
+  // Estrelas clicáveis para avaliação das reviews existentes
+  document.querySelectorAll('.review-rating').forEach(ratingDiv => {
+    const reviewId = ratingDiv.getAttribute('data-review-id');
+    const ratingValue = parseInt(ratingDiv.getAttribute('data-rating')) || 0;
+    const stars = ratingDiv.querySelectorAll('.star');
+
+    // Preenche as estrelas conforme rating atual
+    function fillStars(value) {
+      stars.forEach(star => {
+        star.textContent = (parseInt(star.getAttribute('data-value')) <= value) ? '★' : '☆';
+      });
     }
+
+    fillStars(ratingValue);
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        const value = parseInt(star.getAttribute('data-value'));
+        fillStars(value);
+
+        alert(`Você avaliou esta review com ${value} estrelas.`);
+
+        // Enviar avaliação ao backend - adapte a URL conforme sua API
+        fetch(`/reviews/${reviewId}/rate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ rating: value })
+        })
+                .then(response => {
+                  if (response.ok) {
+                    alert('Avaliação da review salva com sucesso!');
+                  } else {
+                    alert('Erro ao salvar avaliação da review.');
+                  }
+                })
+                .catch(() => alert('Erro na requisição para salvar avaliação da review.'));
+      });
+    });
+  });
+
+  // Controle das estrelas para avaliação do usuário na nova review
+  const userRatingStars = document.querySelectorAll('#userRating .star');
+  let userRatingValue = 0;
+
+  userRatingStars.forEach(star => {
+    star.addEventListener('click', () => {
+      userRatingValue = parseInt(star.getAttribute('data-value'));
+      userRatingStars.forEach(s => {
+        s.textContent = (parseInt(s.getAttribute('data-value')) <= userRatingValue) ? '★' : '☆';
+      });
+    });
+  });
+
+  // Enviar nova review com avaliação para o backend
+  document.getElementById('submitReviewBtn').addEventListener('click', () => {
+    const index = document.getElementById('submitReviewBtn').getAttribute('data-index');
+    const reviewText = document.getElementById('newReview').value.trim();
+
+    if (!reviewText) {
+      alert("Por favor, escreva sua review.");
+      return;
+    }
+    if (userRatingValue === 0) {
+      alert("Por favor, dê uma nota com estrelas.");
+      return;
+    }
+
+    fetch(`/books/${index}/review`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        comment: reviewText,
+        rating: userRatingValue
+      })
+    })
+            .then(response => {
+              if(response.ok) {
+                alert("Review enviada com sucesso!");
+                document.getElementById('newReview').value = '';
+                userRatingValue = 0;
+                userRatingStars.forEach(s => s.textContent = '☆');
+              } else {
+                alert("Erro ao enviar review.");
+              }
+            })
+            .catch(() => alert("Erro na requisição."));
   });
 </script>
+
 <div th:replace="fragments/footer :: footer"></div>
 
 </body>

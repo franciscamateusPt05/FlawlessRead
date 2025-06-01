@@ -1,24 +1,43 @@
 package com.example.FlawlessRead.controllers;
 
 import com.example.FlawlessRead.model.Book;
+import com.example.FlawlessRead.model.CustomUserDetails;
+import com.example.FlawlessRead.model.Review;
+import com.example.FlawlessRead.model.User;
+import com.example.FlawlessRead.repository.ReviewRepository;
+import com.example.FlawlessRead.service.BookService;
 import com.example.FlawlessRead.service.OpenLibraryService;
+import com.example.FlawlessRead.service.ReviewService;
+import com.example.FlawlessRead.service.UserService;
+
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/books")
 public class BookController {
 
     private final OpenLibraryService openLibraryService;
+    private final BookService bookService;
+    private final ReviewService reviewService;
+    private final UserService userService; //
+    @Autowired
+    private ReviewRepository reviewRepository;
 
-    public BookController(OpenLibraryService openLibraryService) {
+    public BookController(OpenLibraryService openLibraryService, BookService bookService, ReviewService reviewService, UserService userService) {
         this.openLibraryService = openLibraryService;
+        this.bookService = bookService;
+        this.reviewService = reviewService;
+        this.userService = userService;
     }
 
     @GetMapping("/{index}")
@@ -28,17 +47,25 @@ public class BookController {
         if (books != null && index >= 0 && index < books.size()) {
             Book selectedBook = books.get(index);
 
-            // Buscar a descrição da API, usando a chave do livro
             if (selectedBook.getKey() != null) {
                 String descricao = openLibraryService.getBookDescription(selectedBook.getKey());
                 model.addAttribute("descricao", descricao);
-
-            }
-            else{
+            } else {
                 model.addAttribute("descricao", null);
+            }
+            if (bookService.findByIsbn(selectedBook.getIsbn()) != null) {
+                Book book = bookService.findByIsbn(selectedBook.getIsbn());
+                List<Review> reviews = reviewRepository.findByBookId(book.getId());
+                model.addAttribute("reviews", reviews);
+            }else {
+                List<Review> reviews = null;
+                model.addAttribute("reviews", reviews);
             }
 
             model.addAttribute("book", selectedBook);
+            model.addAttribute("index", index);
+            model.addAttribute("book", selectedBook);
+            model.addAttribute("index", index);
 
             return "book-details";
         } else {
@@ -46,7 +73,151 @@ public class BookController {
         }
     }
 
+    // Endpoints para alterar status do livro para o usuário logado
 
+    @PostMapping("/{index}/wantToRead")
+    public ResponseEntity<?> markWantToRead(
+            @AuthenticationPrincipal User user,
+            @PathVariable Integer index,
+            HttpSession session) {
 
+        if (user == null) {
+            return ResponseEntity.status(401).body("Usuário não autenticado");
+        }
+
+        List<Book> books = (List<Book>) session.getAttribute("books");
+        if (books == null || index < 0 || index >= books.size()) {
+            return ResponseEntity.badRequest().body("Índice do livro inválido");
+        }
+
+        Book sessionBook = books.get(index);
+        if (sessionBook.getIsbn() == null) {
+            return ResponseEntity.badRequest().body("Livro sem ISBN");
+        }
+
+        User sessionUser = userService.findByUsername(user.getUsername());
+
+        Book book = bookService.findByIsbn(sessionBook.getIsbn());
+        if (book == null) {
+            book = new Book();
+            book.setIsbn(sessionBook.getIsbn());
+            book.setTitulo(sessionBook.getTitulo());
+            book.setAutor(sessionBook.getAutor());
+            book.setCapaUrl(sessionBook.getCapaUrl());
+            book.setGenero(sessionBook.getGenero());
+            book = bookService.save(book);
+        }
+
+        if (!sessionUser.getWantToRead().contains(book)) {
+            sessionUser.getWantToRead().add(book);
+            userService.save(sessionUser);
+        }
+
+        return ResponseEntity.ok("Livro marcado como Quero Ler");
+    }
+
+    @PostMapping("/{index}/alreadyRead")
+    public ResponseEntity<?> markAlreadyRead(
+            @AuthenticationPrincipal User user,
+            @PathVariable Integer index,
+            HttpSession session) {
+
+        if (user == null) {
+            return ResponseEntity.status(401).body("Usuário não autenticado");
+        }
+
+        List<Book> books = (List<Book>) session.getAttribute("books");
+        if (books == null || index < 0 || index >= books.size()) {
+            return ResponseEntity.badRequest().body("Índice do livro inválido");
+        }
+
+        Book sessionBook = books.get(index);
+        if (sessionBook.getIsbn() == null) {
+            return ResponseEntity.badRequest().body("Livro sem ISBN");
+        }
+
+        Book book = bookService.findByIsbn(sessionBook.getIsbn());
+        if (book == null) {
+            book = new Book();
+            book.setIsbn(sessionBook.getIsbn());
+            book.setTitulo(sessionBook.getTitulo());
+            book.setAutor(sessionBook.getAutor());
+            book.setCapaUrl(sessionBook.getCapaUrl());
+            book.setGenero(sessionBook.getGenero());
+            book = bookService.save(book);
+        }
+
+        User sessionUser = userService.findByUsername(user.getUsername());
+
+        if (!sessionUser.getAlreadyRead().contains(book)) {
+            sessionUser.getAlreadyRead().add(book);
+            userService.save(sessionUser);
+        }
+
+        return ResponseEntity.ok("Livro marcado como Já Li");
+    }
+
+    @PostMapping("/{index}/review")
+    public ResponseEntity<?> addReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Integer index,
+            @RequestBody Review reviewDTO,
+            HttpSession session) {
+
+        if (user == null) {
+            return ResponseEntity.status(401).body("Usuário não autenticado");
+        }
+
+        List<Book> books = (List<Book>) session.getAttribute("books");
+        if (books == null || index < 0 || index >= books.size()) {
+            return ResponseEntity.badRequest().body("Índice do livro inválido");
+        }
+
+        Book sessionBook = books.get(index);
+        if (sessionBook.getIsbn() == null) {
+            return ResponseEntity.badRequest().body("Livro sem ISBN");
+        }
+
+        Book book = bookService.findByIsbn(sessionBook.getIsbn());
+        if (book == null) {
+            book = new Book();
+            book.setIsbn(sessionBook.getIsbn());
+            book.setTitulo(sessionBook.getTitulo());
+            book.setAutor(sessionBook.getAutor());
+            book.setCapaUrl(sessionBook.getCapaUrl());
+            book.setGenero(sessionBook.getGenero());
+            book = bookService.save(book);
+        }
+
+        User sessionUser = userService.findByUsername(user.getUsername());
+
+        Review review = new Review();
+        review.setUser(sessionUser);
+        review.setBook(book);
+        review.setComment(reviewDTO.getComment());
+        review.setRating(reviewDTO.getRating());
+
+        reviewService.save(review);
+
+        return ResponseEntity.ok("Review adicionada com sucesso");
+    }
+
+    // GET para AlreadyRead
+    @GetMapping("/alreadyRead")
+    public ResponseEntity<Set<Book>> getAlreadyRead(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(user.getAlreadyRead());
+    }
+
+    // GET para WantToRead
+    @GetMapping("/wantToRead")
+    public ResponseEntity<Set<Book>> getWantToRead(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(user.getWantToRead());
+    }
 
 }

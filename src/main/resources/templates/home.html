@@ -22,14 +22,17 @@
 </div>
 </section>
 <!-- Tendências -->
+<!-- Tendências -->
 <section class="books-section container">
     <h2>Trending Now</h2>
     <div class="books-grid">
-        <div th:each="book,iterStat : ${trendingBooks}" th:if="${iterStat.index} < 10" class="book-card">
-            <img th:src="${book.getCapaUrl()}" th:alt="${book.getTitulo()}" />
-            <h4 th:text="${book.getTitulo()}">Book Title</h4>
-            <p th:text="${book.getAutor()}">Author Name</p>
-        </div>
+        <a th:each="book, iterStat : ${trendingBooks}" th:href="@{/books/{index}(index=${iterStat.index})}" style="text-decoration: none; color: inherit;">
+            <div class="book-card">
+                <img th:src="${book.getCapaUrl()}" th:alt="${book.getTitulo()}" />
+                <h4 th:text="${book.getTitulo()}">Book Title</h4>
+                <p th:text="${book.getAutor()}">Author Name</p>
+            </div>
+        </a>
     </div>
 </section>
 
@@ -37,15 +40,16 @@
 <section class="books-section container">
     <h2>New Releases</h2>
     <div class="books-grid">
-        <div th:each="book,iterStat : ${newBooks}" th:if="${iterStat.index} < 10" class="book-card">
-            <img th:src="${book.getCapaUrl()}" th:alt="${book.getTitulo()}" />
-            <h4 th:text="${book.getTitulo()}">Book Title</h4>
-            <p th:text="${book.getAutor()}">Author Name</p>
-        </div>
+        <a th:each="book, iterStat : ${newBooks}" th:href="@{/books/{index}(index=${trendingBooks.size() + iterStat.index})}" style="text-decoration: none; color: inherit;">
+            <div class="book-card">
+                <img th:src="${book.getCapaUrl()}" th:alt="${book.getTitulo()}" />
+                <h4 th:text="${book.getTitulo()}">Book Title</h4>
+                <p th:text="${book.getAutor()}">Author Name</p>
+            </div>
+        </a>
     </div>
 </section>
 
 <div th:replace="fragments/footer :: footer"></div>
-<script src="../../static/log.js"></script>
 </body>
 </html>

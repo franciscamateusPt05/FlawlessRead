@@ -638,6 +638,233 @@ button.active {
     background: var(--color5);
 }
 
+.status-btn {
+    background: var(--color3);
+    border: 1px solid var(--color2);
+    padding: 8px 12px;
+    margin-right: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--color4);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s, color 0.3s;
+    user-select: none;
+}
+
+.status-btn svg {
+    stroke: var(--color4);
+}
+
+.status-btn.active,
+.status-btn[aria-pressed="true"] {
+    background: var(--color5);
+    color: white;
+}
+
+.status-btn.active svg,
+.status-btn[aria-pressed="true"] svg {
+    stroke: white;
+}
+
+.review-rating {
+    margin-top: 20px;
+    font-weight: 600;
+    color: var(--color4);
+    user-select: none;
+}
+
+.stars {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 1.8rem;
+    color: var(--color2);
+}
+
+.star {
+    padding: 0 3px;
+    user-select: none;
+}
+
+.star.filled {
+    color: var(--color5);
+}
+/* Reviews Section */
+.reviews-section {
+    max-width: 900px;
+    margin: 40px auto 60px;
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    padding: 40px 50px;
+    box-shadow: 0 8px 30px var(--shadow-color);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+}
+
+.reviews-section h2 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.8rem;
+    color: var(--color5);
+    margin-bottom: 35px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+/* Container com scroll para as reviews */
+#reviewsList {
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 10px; /* para o scroll não sobrepor texto */
+    border-top: 1.5px solid var(--color3);
+    padding-top: 25px;
+}
+
+/* Cada review individual */
+.review-item {
+    background: var(--color3);
+    border-radius: 12px;
+    padding: 18px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.review-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* Header da review: username + estrelas */
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.review-username {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color5);
+    letter-spacing: 0.03em;
+}
+
+/* Estrelas preenchidas e vazias */
+.review-rating .star {
+    font-size: 1.4rem;
+    color: var(--color2);
+    user-select: none;
+    margin-left: 3px;
+    transition: color 0.3s ease;
+}
+
+.review-rating .star.filled {
+    color: var(--color5);
+    text-shadow: 0 0 4px var(--color5);
+}
+
+/* Comentário da review */
+.review-comment {
+    font-size: 1rem;
+    color: var(--color4);
+    line-height: 1.5;
+    font-style: italic;
+    white-space: pre-wrap; /* mantém quebras de linha */
+}
+
+/* Texto quando não houver reviews */
+.no-reviews {
+    padding: 18px 20px;
+    background-color: var(--color2);
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Container geral da área de adicionar review */
+.add-review {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px; /* largura máxima fixa */
+    width: 100%;       /* responsivo */
+    margin-left: auto; /* centraliza horizontalmente */
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* Rating das estrelas para o usuário escolher */
+.user-rating {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 2rem;
+    cursor: pointer;
+    user-select: none;
+    max-width: 600px; /* mesmo tamanho do container */
+    margin: 0 auto;   /* centraliza horizontalmente */
+    box-sizing: border-box;
+}
+
+.user-rating .star {
+    color: var(--color2);
+    transition: color 0.3s ease;
+}
+
+.user-rating .star.hovered,
+.user-rating .star.selected {
+    color: var(--color5);
+    text-shadow: 0 0 6px var(--color5);
+}
+
+/* Textarea para escrever a review */
+.add-review textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid var(--color2);
+    border-radius: 14px;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+    resize: vertical;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.03);
+    box-sizing: border-box;
+}
+
+.add-review textarea:focus {
+    outline: none;
+    border-color: var(--color5);
+    box-shadow: 0 0 12px var(--color5);
+}
+
+/* Botão enviar review */
+.add-review button {
+    align-self: flex-end;
+    background: var(--cta-gradient);
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 18px var(--shadow-color);
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    letter-spacing: 0.04em;
+}
+
+.add-review button:hover {
+    background-color: var(--color5);
+    box-shadow: 0 8px 22px var(--color5);
+}
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
