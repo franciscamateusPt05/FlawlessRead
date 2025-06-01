@@ -1,10 +1,9 @@
 package com.example.FlawlessRead.controllers;
 
-import com.example.FlawlessRead.model.Book;
-import com.example.FlawlessRead.model.CustomUserDetails;
-import com.example.FlawlessRead.model.Review;
-import com.example.FlawlessRead.model.User;
+import com.example.FlawlessRead.model.*;
 import com.example.FlawlessRead.repository.ReviewRepository;
+import com.example.FlawlessRead.repository.UserBookRepository;
+import com.example.FlawlessRead.repository.UserRepository;
 import com.example.FlawlessRead.service.BookService;
 import com.example.FlawlessRead.service.OpenLibraryService;
 import com.example.FlawlessRead.service.ReviewService;
@@ -14,11 +13,11 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +31,13 @@ public class BookController {
     private final UserService userService; //
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private UserBookRepository userBookRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+
 
     public BookController(OpenLibraryService openLibraryService, BookService bookService, ReviewService reviewService, UserService userService) {
         this.openLibraryService = openLibraryService;
@@ -149,13 +155,27 @@ public class BookController {
 
         User sessionUser = userService.findByUsername(user.getUsername());
 
-        if (!sessionUser.getAlreadyRead().contains(book)) {
-            sessionUser.getAlreadyRead().add(book);
-            userService.save(sessionUser);
+        final Long bookId = book.getId();
+
+        boolean alreadyRead = sessionUser.getAlreadyRead().stream()
+                .anyMatch(ub -> ub.getBook().getId().equals(bookId));
+
+
+        if (!alreadyRead) {
+            UserBookId id = new UserBookId(sessionUser.getId(), book.getId());
+
+            // Verifique se já existe UserBook com esse ID no banco (pode usar o repositório)
+            if (!userBookRepository.existsById(id)) {
+                UserBook userBook = new UserBook(id, sessionUser, book, LocalDate.now());
+                sessionUser.getAlreadyRead().add(userBook);
+
+                userRepository.save(sessionUser);  // Cascade salva o UserBook
+            }
         }
 
-        return ResponseEntity.ok("Livro marcado como Já Li");
+        return ResponseEntity.ok("Livro marcado como já lido");
     }
+
 
     @PostMapping("/{index}/review")
     public ResponseEntity<?> addReview(
@@ -204,7 +224,7 @@ public class BookController {
 
     // GET para AlreadyRead
     @GetMapping("/alreadyRead")
-    public ResponseEntity<Set<Book>> getAlreadyRead(@AuthenticationPrincipal User user) {
+    public ResponseEntity<Set<UserBook>> getAlreadyRead(@AuthenticationPrincipal User user) {
         if (user == null) {
             return ResponseEntity.status(401).build();
         }
