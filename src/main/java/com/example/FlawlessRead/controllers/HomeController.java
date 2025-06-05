@@ -43,7 +43,7 @@ public class HomeController {
         this.readingService = readingService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String showHome(@AuthenticationPrincipal UserDetails userDetails, Model model, HttpSession session) {
         if (userDetails == null) {
             return "redirect:/login";
@@ -62,13 +62,24 @@ public class HomeController {
 
         // Buscar trending (ordenar por relevância) e novidades (ordenar por "new" ou data)
         List<Book> trendingBooks = bookService.fetchBooksByGenres(generos);
-        if (trendingBooks.size() > 10) {
+        if (trendingBooks.size() > 10 && trendingBooks.size() < 4) {
             trendingBooks = trendingBooks.subList(0, 10);
+            model.addAttribute("trendingBooks", trendingBooks);
         }
+        else{
+            List<Book> trendingBook = bookService.fetchBooksByGenres(new ArrayList<>(List.of(generos.getFirst())));
+            model.addAttribute("trendingBooks", trendingBook.subList(0, 10));
+        }
+
 
         List<Book> newBooks = bookService.fetchBooksByGenres(generos, "new");
         if (newBooks.size() > 10) {
             newBooks = newBooks.subList(0, 10);
+            model.addAttribute("newBooks", newBooks);
+        }
+        else{
+            List<Book> newBook = bookService.fetchBooksByGenres(new ArrayList<>(List.of(generos.getFirst())), "new");
+            model.addAttribute("newBooks", newBook.subList(0, 10));
         }
 
 
@@ -78,8 +89,6 @@ public class HomeController {
         session.setAttribute("books", books);
 
         model.addAttribute("user", user);
-        model.addAttribute("trendingBooks", trendingBooks);
-        model.addAttribute("newBooks", newBooks);
         model.addAttribute("generos", generos);
 
         return "home";
@@ -113,6 +122,39 @@ public class HomeController {
 
         return "stats"; // template Thymeleaf
     }
+
+    @GetMapping("/")
+    public String landingPage() {
+        return "landingpage";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        String username = userDetails.getUsername();
+
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (optionalUser.isEmpty()) {
+            return "redirect:/login"; // ou página de erro, se preferir
+        }
+
+        User user = optionalUser.get();
+
+        // Supondo que ReadingService tenha esses métodos:
+        int booksRead = readingService.countBooksReadByUser(user.getId());
+
+
+        model.addAttribute("user", user);
+        model.addAttribute("booksRead", booksRead);
+
+
+        return "profile";  // nome do template Thymeleaf (profile.html)
+    }
+
 
 
 

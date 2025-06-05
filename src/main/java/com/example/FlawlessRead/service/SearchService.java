@@ -116,6 +116,7 @@ public class SearchService {
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
 
+            System.out.println("Matched subjects: " + matchedSubjects);
             // Se não encontrou nenhum com score > 0, pode retornar todos ou algum padrão
             if (matchedSubjects.isEmpty()) {
                 System.out.println("Nenhum subject encontrado com interseção, retornando todos os subjects.");
@@ -148,6 +149,10 @@ public class SearchService {
                     return webClient.get()
                             .uri(url)
                             .accept(MediaType.APPLICATION_JSON)
+                            // Headers para evitar cache HTTP
+                            .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                            .header("Pragma", "no-cache")
+                            .header("Expires", "0")
                             .retrieve()
                             .bodyToMono(JsonNode.class)
                             .onErrorResume(e -> Mono.empty())
@@ -172,7 +177,12 @@ public class SearchService {
                                                 isbn = "unknown_" + UUID.randomUUID();
                                             }
 
+                                            // Garantir que key nunca seja nulo para o distinct funcionar direito
                                             String key = work.path("key").asText(null);
+                                            if (key == null || key.isEmpty()) {
+                                                key = "generated_" + UUID.randomUUID();
+                                            }
+
                                             int publishYear = work.path("first_publish_year").asInt(0);
                                             LocalDate dataPublicacao = null;
                                             if (publishYear >= 1000 && publishYear <= LocalDate.now().getYear()) {
@@ -205,6 +215,7 @@ public class SearchService {
                     return bookList;
                 });
     }
+
 
     public Mono<List<Book>> processMusicToBooks(String trackId, String artistId) {
         return getGenresFromArtistAndTrack(trackId, artistId)

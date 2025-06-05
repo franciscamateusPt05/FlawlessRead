@@ -12,13 +12,12 @@
 <main class="container">
   <div class="auth-form-container">
     <h2>Preference Questionnaire</h2>
-    <form method="post" action="/questionnaire">
+    <form method="post" action="/questionnaire" onsubmit="return validateCheckboxes()">
       <input type="hidden" name="userId" th:value="${user.id}" />
 
-      <h3>Meta de leitura anual</h3>
-      <label for="goalBook">Número de livros por ano:</label>
+      <h3>Annual Reading Goal</h3>
+      <label for="goalBook">Number of books per year:</label>
       <input type="number" id="goalBook" name="goalBook" min="1" max="1000" />
-
 
       <h3>Fiction</h3>
       <label><input type="checkbox" name="generosPreferidos" value="Fantasy"/> Fantasy</label><br/>
@@ -53,11 +52,30 @@
       <label><input type="checkbox" name="generosPreferidos" value="Composers"/> Composers</label><br/>
       <label><input type="checkbox" name="generosPreferidos" value="Artists"/> Artists</label><br/>
 
-      <button type="submit">Enviar</button>
-    </form>
 
+      <button type="submit">Submit</button>
+    </form>
   </div>
 </main>
+
+<script>
+  function validateCheckboxes() {
+    const checkboxes = document.querySelectorAll('input[name="generosPreferidos"]:checked');
+    const goalBook = document.getElementById('goalBook').value;
+
+    if (!goalBook || parseInt(goalBook) < 1) {
+      alert("Please enter a valid reading goal (at least 1 book).");
+      return false;
+    }
+
+    if (checkboxes.length === 0) {
+      alert("Please select at least one genre.");
+      return false;
+    }
+
+    return true;
+  }
+</script>
 
 </body>
 </html>

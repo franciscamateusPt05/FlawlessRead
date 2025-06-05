@@ -26,12 +26,25 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/styles.css", "/login", "/questionnaire", "/register", "/css/**", "/js/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/register",
+                                "/questionnaire",
+                                "/landingpage",
+                                "/styles.css",
+                                "/js/**",
+                                "/images/**",
+                                "/static/**",
+                                "/**.png",
+                                "/**.jpg"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

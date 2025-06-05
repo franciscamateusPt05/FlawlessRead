@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>Resultados da Pesquisa</title>
+  <title>Search Results</title>
   <link rel="stylesheet" th:href="@{/styles.css}">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat&display=swap" rel="stylesheet" />
 </head>
@@ -14,20 +14,20 @@
 <!-- Main Content -->
 <main class="container">
   <section class="welcome-section">
-    <h2 class="great-vibes">Resultados para: <span th:text="${query}">Pesquisa</span></h2>
-    <p th:if="${#lists.isEmpty(books)}">Nenhum livro encontrado para a pesquisa.</p>
+    <h2 class="great-vibes">Results for: <span th:text="${query}">Search</span></h2>
+    <p th:if="${#lists.isEmpty(books)}">No books found for your search.</p>
   </section>
 
   <section class="books-section" th:if="${!#lists.isEmpty(books)}">
-    <h2>Livros Encontrados</h2>
+    <h2>Books Found</h2>
     <div class="books-grid">
       <a th:each="book, iterStat : ${books}"
          th:href="@{/books/{index}(index=${iterStat.index})}"
          style="text-decoration: none; color: inherit;">
         <div class="book-card">
-          <img th:src="${book.getCapaUrl()}" alt="Capa do livro" />
-          <h4 th:text="${book.getTitulo()}">Título do Livro</h4>
-          <p th:text="${book.getAutor()}">Autor</p>
+          <img th:src="${book.getCapaUrl()}" alt="Book cover" />
+          <h4 th:text="${book.getTitulo()}">Book Title</h4>
+          <p th:text="${book.getAutor()}">Author</p>
         </div>
       </a>
     </div>

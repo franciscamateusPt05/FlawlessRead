@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<section class="profile-section">
+    <div class="container">
+        <div class="profile-header">
+            <div class="avatar-emoji" aria-label="User avatar" role="img">📚</div>
+            <div class="user-info">
+                <h2 class="great-vibes" th:text="${user.username}">User Name</h2>
+                <p class="email" th:text="${user.email}">user@example.com</p>
+            </div>
+        </div>
+
+
+        <!-- Basic Profile Settings -->
+        <section class="profile-settings">
+            <h3>Account Settings</h3>
+            <ul class="settings-list">
+                <li>
+                    <i class="fas fa-key"></i>
+                    <a href="#" title="Change Password">Change Password</a>
+                </li>
+                <li>
+                    <i class="fas fa-envelope"></i>
+                    <a href="#" title="Edit Email">Edit Email</a>
+                </li>
+                <li>
+                    <i class="fas fa-cogs"></i>
+                    <a href="#" title="Manage Preferences">Manage Preferences</a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Privacy & Security -->
+        <section class="privacy-security">
+            <h3>Privacy & Security</h3>
+            <ul class="settings-list">
+                <li>
+                    <i class="fas fa-user-shield"></i>
+                    <label>
+                        <input type="checkbox" name="profilePrivate" />
+                        Make Profile Private
+                    </label>
+                </li>
+                <li>
+                    <i class="fas fa-lock"></i>
+                    <label>
+                        <input type="checkbox" name="twoFactorAuth" />
+                        Enable Two-Factor Authentication
+                    </label>
+                </li>
+                <li>
+                    <i class="fas fa-database"></i>
+                    <a href="#" title="Manage Data Sharing">Manage Data Sharing</a>
+                </li>
+            </ul>
+        </section>
+
+    </div>
+</section>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

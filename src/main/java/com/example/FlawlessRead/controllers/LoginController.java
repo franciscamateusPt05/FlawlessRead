@@ -46,7 +46,7 @@ public class LoginController {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 model.addAttribute("user", user);
                 session.setAttribute("user", user); // guarda na sessão
-                return "redirect:/"; // vai para home
+                return "redirect:/home"; // vai para home
             }
         }
 

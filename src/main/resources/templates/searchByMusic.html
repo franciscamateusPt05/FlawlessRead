@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pesquisar Música | FlawlessRead</title>
+  <title>Search by Music | FlawlessRead</title>
   <link rel="stylesheet" th:href="@{/styles.css}" />
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 </head>
@@ -11,27 +11,27 @@
 <div th:replace="fragments/header :: headerFragment"></div>
 
 <section class="welcome-section">
-  <h2 class="great-vibes">Descobre Novos Mundos</h2>
-  <h3>Pesquisa livros com base numa música</h3>
-  <p>Escreve o nome de uma música para encontrares livros que combinam com ela.</p>
+  <h2 class="great-vibes">Discover New Worlds</h2>
+  <h3>Search for books based on a song</h3>
+  <p>Enter a song name to find books that match its vibe.</p>
 </section>
 
 <section class="container">
   <form th:action="@{/searchByMusic}" method="post" class="auth-form-container">
-    <label for="trackName">Nome da música:</label>
+    <label for="trackName">Song Name:</label>
     <div class="search-wrapper">
       <input
               type="text"
               id="trackName"
               name="trackName"
               autocomplete="off"
-              placeholder="Escreve o nome da música..."
+              placeholder="Enter the song name..."
       />
-      <!-- Input escondido para o artista -->
+      <!-- Hidden input for the artist -->
       <input type="hidden" id="artistName" name="artistName" />
       <div id="suggestions" class="autocomplete-suggestions"></div>
     </div>
-    <button type="submit">Pesquisar</button>
+    <button type="submit">Search</button>
   </form>
 </section>
 
@@ -46,7 +46,7 @@
     const query = input.value.trim();
     if (query.length < 2) {
       suggestionsBox.innerHTML = '';
-      artistInput.value = ''; // limpa artista ao apagar input
+      artistInput.value = ''; // clear artist when input is emptied
       return;
     }
 
@@ -60,7 +60,7 @@
       div.textContent = item.name + ' - ' + item.artist;
       div.addEventListener('click', () => {
         input.value = item.name;
-        artistInput.value = item.artist;  // preenche o campo escondido com o artista
+        artistInput.value = item.artist; // fill hidden artist field
         suggestionsBox.innerHTML = '';
       });
       suggestionsBox.appendChild(div);

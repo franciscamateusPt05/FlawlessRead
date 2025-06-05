@@ -12,7 +12,7 @@
 
   <form th:action="@{/login}" method="post">
     <div th:if="${param.error}" class="error-message">
-      Utilizador ou password inválidos.
+      Invalid username or password.
     </div>
 
     <label for="username">Username:</label>
@@ -25,11 +25,11 @@
   </form>
 
   <div class="switch-link">
-    Ainda não tens conta? <a href="/register">Regista-te aqui</a>.
+    Don’t have an account yet? <a href="/register">Register here</a>.
   </div>
 
   <div th:if="${param.logout}" style="text-align: center; margin-top: 15px; color: var(--color4); font-weight: 600;">
-    Sessão terminada com sucesso.
+    Successfully logged out.
   </div>
 </section>
 

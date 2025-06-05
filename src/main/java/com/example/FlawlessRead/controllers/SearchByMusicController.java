@@ -38,7 +38,7 @@ public class SearchByMusicController {
                 model.addAttribute("error", "Música não encontrada.");
                 return "results";
             }
-            List<Book> books = searchService.processMusicToBooks(ids[0], ids[1]).block(); // bloqueia também
+            List<Book> books = searchService.processMusicToBooks(ids[0], ids[1]).block();
             model.addAttribute("books", books);
             session.setAttribute("books", books); // salva na sessão
         } catch (Exception e) {
