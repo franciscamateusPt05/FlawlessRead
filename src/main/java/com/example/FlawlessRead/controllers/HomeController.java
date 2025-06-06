@@ -62,24 +62,32 @@ public class HomeController {
 
         // Buscar trending (ordenar por relevância) e novidades (ordenar por "new" ou data)
         List<Book> trendingBooks = bookService.fetchBooksByGenres(generos);
-        if (trendingBooks.size() > 10 && trendingBooks.size() < 4) {
+        if (trendingBooks.size() > 10 || trendingBooks.size() < 5) {
             trendingBooks = trendingBooks.subList(0, 10);
             model.addAttribute("trendingBooks", trendingBooks);
         }
         else{
             List<Book> trendingBook = bookService.fetchBooksByGenres(new ArrayList<>(List.of(generos.getFirst())));
-            model.addAttribute("trendingBooks", trendingBook.subList(0, 10));
+            if(trendingBook.size() > 10){
+                model.addAttribute("trendingBooks", trendingBook.subList(0, 10));
+            }
+            else{
+                model.addAttribute("trendingBooks", trendingBook);
+            }
         }
 
 
         List<Book> newBooks = bookService.fetchBooksByGenres(generos, "new");
-        if (newBooks.size() > 10) {
+        if (newBooks.size() > 10 || newBooks.size() < 5) {
             newBooks = newBooks.subList(0, 10);
             model.addAttribute("newBooks", newBooks);
         }
         else{
             List<Book> newBook = bookService.fetchBooksByGenres(new ArrayList<>(List.of(generos.getFirst())), "new");
-            model.addAttribute("newBooks", newBook.subList(0, 10));
+            if (newBook.size() > 10) {
+                model.addAttribute("newBooks", newBook.subList(0, 10));
+            }
+            else{model.addAttribute("newBooks", newBook);}
         }
 
 
