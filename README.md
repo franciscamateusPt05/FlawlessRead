@@ -1,49 +1,39 @@
 # FlawlessRead
 
+> A Java-based application featuring an HTML and CSS frontend, containerized with Docker for easy deployment and scalability.
+
+---
+
+## Table of Contents
+- [Description](#description)
+- [Technologies](#technologies)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Option 1: Using Docker (Recommended)](#option-1-using-docker-recommended)
+  - [Option 2: Using Maven](#option-2-using-maven)
+- [Documentation](#documentation)
+- [Author](#author)
+
+---
+
 ## Description
-FlawlessRead is a Java-based application that utilizes an HTML and CSS frontend. This repository contains the source code, infrastructure configurations, and the project's documentation, including the final report (Relatório Final PGI.pdf).
+**FlawlessRead** is a full-stack project built primarily with Java, utilizing HTML and CSS for the user interface. The project is designed with containerization in mind, ensuring a seamless setup and execution process across different environments.
 
 ## Technologies
-* Backend: Java
-* Build and Dependency Management: Maven
-* Frontend: HTML and CSS
-* Infrastructure: Docker and Docker Compose
+- **Backend:** Java
+- **Build Tool:** Maven
+- **Frontend:** HTML, CSS
+- **Infrastructure:** Docker, Docker Compose
 
 ## Project Structure
-* src/: Contains the source code of the application.
-* pom.xml, .mvn/, mvnw, mvnw.cmd: Maven configuration files and wrapper for building the project.
-* Dockerfile and compose.yml: Files used for containerization and service orchestration.
-* Relatório Final PGI.pdf: The project's final report and documentation.
 
-## How to Run the Project
-You can run this application locally using either Docker or Maven.
-
-### Option 1: Using Docker (Recommended)
-Ensure that Docker and Docker Compose are installed on your system.
-
-1. Clone the repository:
-   git clone https://github.com/franciscamateusPt05/FlawlessRead.git
-   cd FlawlessRead
-
-2. Build and start the containers:
-   docker-compose up --build
-
-### Option 2: Using Maven
-Ensure that a Java Development Kit (JDK) is installed on your system.
-
-1. Clone the repository:
-   git clone https://github.com/franciscamateusPt05/FlawlessRead.git
-   cd FlawlessRead
-
-2. Build and run the application:
-   - On Windows:
-     mvnw.cmd clean install
-     mvnw.cmd spring-boot:run
-   - On Linux/macOS:
-     ./mvnw clean install
-     ./mvnw spring-boot:run
-
-Note: The execution command assumes the project is built with Spring Boot. Adjust the run command if a different framework is being used.
-
-## Author
-* franciscamateusPt05 (https://github.com/franciscamateusPt05)
+```text
+FlawlessRead/
+├── .mvn/                   # Maven wrapper configuration
+├── src/                    # Application source code
+├── Dockerfile              # Docker image configuration
+├── compose.yml             # Docker Compose orchestration
+├── mvnw / mvnw.cmd         # Maven wrapper executables
+├── pom.xml                 # Maven dependencies and build configuration
+└── Relatório Final PGI.pdf # Project documentation and final report
